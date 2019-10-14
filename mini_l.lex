@@ -44,15 +44,19 @@ IDENTIFIER	{LETTER}{LETTER|DIGIT}*
 "false"		{printf("FALSE\n"); curPos += yyleng;}
 "return"	{printf("RETURN\n"); curPos += yyleng;}
 
-
-"+"             {printf("PLUS\n"); curPos += yyleng;}
-"-"             {printf("MINUS\n"); curPos += yyleng;}
+"-"             {printf("SUB\n"); curPos += yyleng;}
+"+"             {printf("ADD\n"); curPos += yyleng;}
 "*"             {printf("MULT\n"); curPos += yyleng;}
 "/"             {printf("DIV\n"); curPos += yyleng;}
-"("             {printf("L_PAREN\n"); curPos += yyleng;}
-")"             {printf("R_PAREN\n"); curPos += yyleng;}
-"="             {printf("EQUAL\n"); curPos += yyleng;}
-{DIGIT}+        {printf("NUMBER %s\n", yytext); curPos += yyleng;}
+"%"             {printf("MOD\n"); curPos += yyleng;}
+
+"=="            {printf("EQ\n"); curPos += yyleng;}
+"<>"            {printf("NEQ\n"); curPos += yyleng;}
+"<"             {printf("LT\n"); curPos += yyleng;}
+">"             {printf("GT\n"); curPos += yyleng;}
+"<="            {printf("LTE\n"); curPos += yyleng;}
+">="            {printf("GTE\n"); curPos += yyleng;}
+
 \n              {curPos = 1; ++curLn;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
