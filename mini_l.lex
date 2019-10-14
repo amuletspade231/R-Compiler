@@ -73,6 +73,7 @@ NONIDENT_2	{IDENTIFIER}_
 {DIGIT}+	{printf("NUMBER %s\n", yytext); curPos += yyleng;}
 
 " "		{}
+"	"	{}
 \n              {curPos = 1; ++curLn;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
