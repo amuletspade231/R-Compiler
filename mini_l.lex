@@ -72,6 +72,7 @@ NONIDENT_2	{IDENTIFIER}_
 {NONIDENT_2}	{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", curLn, curPos, yytext); exit(0);}
 {DIGIT}+	{printf("NUMBER %s\n", yytext); curPos += yyleng;}
 
+" "		{}
 \n              {curPos = 1; ++curLn;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
