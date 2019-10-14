@@ -9,10 +9,11 @@
 
 DIGIT		[0-9]
 LETTER 		[a-zA-Z]
-IDENTIFIER	{LETTER}{LETTER|DIGIT}*
+IDENTIFIER	{LETTER}|({LETTER}({LETTER}|{DIGIT}|_)*({LETTER}|{DIGIT}))
+NONIDENT_1	({DIGIT}|_){IDENTIFIER}
+NONIDENT_2	{IDENTIFIER}_
 %{
-        int num_ops = 0, num_parens = 0, num_equals = 0, nums = 0;
-        int curPos = 1, curLine = 1;
+        int curPos = 1, curLn = 1;
 %}
 
 %%
@@ -57,8 +58,6 @@ IDENTIFIER	{LETTER}{LETTER|DIGIT}*
 "<="            {printf("LTE\n"); curPos += yyleng;}
 ">="            {printf("GTE\n"); curPos += yyleng;}
 
-
-
 ";"            {printf("SEMICOLON\n"); curPos += yyleng;}
 ":"            {printf("COLON\n"); curPos += yyleng;}
 ","            {printf("COMMA\n"); curPos += yyleng;}
@@ -67,6 +66,11 @@ IDENTIFIER	{LETTER}{LETTER|DIGIT}*
 "["            {printf("L_SQUARE_BRACKET\n"); curPos += yyleng;}
 "]"            {printf("R_SQUARE_BRACKET\n"); curPos += yyleng;}
 ":="           {printf("ASSIGN\n"); curPos += yyleng;}
+
+{IDENTIFIER}	{printf("IDENT %s\n", yytext); curPos += yyleng;}
+{NONIDENT_1}	{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", curLn, curPos, yytext); exit(0);}
+{NONIDENT_2}	{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", curLn, curPos, yytext); exit(0);}
+{DIGIT}+	{printf("NUMBER %s\n", yytext); curPos += yyleng;}
 
 \n              {curPos = 1; ++curLn;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
