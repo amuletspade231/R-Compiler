@@ -11,7 +11,7 @@ DIGIT		[0-9]
 
 %{
         int num_ops = 0, num_parens = 0, num_equals = 0, nums = 0;
-        int curPos = 1, curLn = 1;
+        int curPos = 1, curLine = 1;
 %}
 
 %%
@@ -25,7 +25,7 @@ DIGIT		[0-9]
 "="             {printf("EQUAL\n"); curPos += yyleng; ++num_equals;}
 {DIGIT}+        {printf("NUMBER %s\n", yytext); curPos += yyleng; ++nums;}
 \n              {curPos = 1; ++curLn;}
-.               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
+.               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
 %%
 main () {
