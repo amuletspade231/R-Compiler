@@ -12,6 +12,7 @@ LETTER 		[a-zA-Z]
 IDENTIFIER	{LETTER}|({LETTER}({LETTER}|{DIGIT}|_)*({LETTER}|{DIGIT}))
 NONIDENT_1	({DIGIT}|_){IDENTIFIER}
 NONIDENT_2	{IDENTIFIER}_
+COMMENT		[#][#].*\n
 %{
         int curPos = 1, curLn = 1;
 %}
@@ -74,6 +75,7 @@ NONIDENT_2	{IDENTIFIER}_
 
 " "		{}
 "	"	{}
+{COMMENT}	{curPos = 1; ++curLn;}
 \n              {curPos = 1; ++curLn;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
