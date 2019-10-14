@@ -57,6 +57,17 @@ IDENTIFIER	{LETTER}{LETTER|DIGIT}*
 "<="            {printf("LTE\n"); curPos += yyleng;}
 ">="            {printf("GTE\n"); curPos += yyleng;}
 
+
+
+";"            {printf("SEMICOLON\n"); curPos += yyleng;}
+":"            {printf("COLON\n"); curPos += yyleng;}
+","            {printf("COMMA\n"); curPos += yyleng;}
+"("            {printf("L_PAREN\n"); curPos += yyleng;}
+")"            {printf("R_PAREN\n"); curPos += yyleng;}
+"["            {printf("L_SQUARE_BRACKET\n"); curPos += yyleng;}
+"]"            {printf("R_SQUARE_BRACKET\n"); curPos += yyleng;}
+":="           {printf("ASSIGN\n"); curPos += yyleng;}
+
 \n              {curPos = 1; ++curLn;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
