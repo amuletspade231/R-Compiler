@@ -14,6 +14,7 @@ NONIDENT_1	({DIGIT}|_)+{IDENTIFIER}
 NONIDENT_2	{IDENTIFIER}_+
 COMMENT		[#][#].*\n
 %{
+	#include "y.tab.h"
         int curPos = 1, curLn = 1;
 %}
 
@@ -68,7 +69,7 @@ COMMENT		[#][#].*\n
 "]"            {curPos += yyleng; return R_SQUARE_BRACKET;}
 ":="           {curPos += yyleng; return ASSIGN;}
 
-{IDENTIFIER}	{curPos += yyleng; yylval.sval = atof(yytext); return IDENTIFIER;}
+{IDENTIFIER}	{curPos += yyleng; yylval.sval = (char**)yytext; return IDENTIFIER;}
 {NONIDENT_1}	{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", curLn, curPos, yytext); exit(0);}
 {NONIDENT_2}	{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", curLn, curPos, yytext); exit(0);}
 {DIGIT}+	{curPos += yyleng; yylval.ival = atof(yytext); return NUMBER;}
@@ -76,11 +77,12 @@ COMMENT		[#][#].*\n
 " "		{}
 "	"	{curPos += yyleng;}
 {COMMENT}	{curPos = 1; ++curLn;}
-\n              {curPos = 1; ++curLn; return END}
+\n              {curPos = 1; ++curLn; return END;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
 %%
+/*
 main () {
   yylex();
 }
-
+*/

@@ -3,8 +3,8 @@
  #include <stdio.h>
  #include <stdlib.h>
  void yyerror(const char *msg);
- extern int currLine;
- extern int currPos;
+ extern int curLn;
+ extern int curPos;
  FILE * yyin;
 %}
 
@@ -16,12 +16,19 @@
 
 %error-verbose
 %start input
-%token MULT DIV PLUS MINUS EQUAL L_PAREN R_PAREN END
-%token <dval> NUMBER
+%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END IDENTIFIER
 %type <dval> exp
+%token <dval> NUMBER
+%left ASSIGN
+%left OR
+%left AND
+%right NOT
+%left LT LTE GT GTE EQ NEQ
 %left PLUS MINUS
-%left MULT DIV
-%nonassoc UMINUS
+%left MULT DIV MOD
+%right UMINUS
+%left L_SQUARE_BRACKET R_SQUARE_BRACKET
+%left L_PAREN R_PAREN
 
 
 %% 
@@ -29,7 +36,7 @@ input:
 			| input line
 			;
 
-line:		exp EQUAL END         { printf("\t%f\n", $1);}
+line:		exp EQ END         { printf("\t%f\n", $1);}
 			;
 
 exp:		NUMBER                { $$ = $1; }
@@ -54,5 +61,5 @@ int main(int argc, char **argv) {
 }
 
 void yyerror(const char *msg) {
-   printf("** Line %d, position %d: %s\n", currLine, currPos, msg);
+   printf("** Line %d, position %d: %s\n", curLn, curPos, msg);
 }
