@@ -7,15 +7,17 @@
  *CS 152 - Phase 2
  */
 
+%{
+	#include "y.tab.h"
+	int curPos = 1, curLn = 1;
+%}
+
 DIGIT		[0-9]
 LETTER 		[a-zA-Z]
 IDENTIFIER	{LETTER}|({LETTER}({LETTER}|{DIGIT}|_)*({LETTER}|{DIGIT}))
 NONIDENT_1	({DIGIT}|_)+{IDENTIFIER}
 NONIDENT_2	{IDENTIFIER}_+
 COMMENT		[#][#].*\n
-%{
-        int curPos = 1, curLn = 1;
-%}
 
 %%
 "function"	{curPos += yyleng; return FUNCTION;}
@@ -76,11 +78,13 @@ COMMENT		[#][#].*\n
 " "		{}
 "	"	{curPos += yyleng;}
 {COMMENT}	{curPos = 1; ++curLn;}
-\n              {curPos = 1; ++curLn; return END}
+\n              {curPos = 1; ++curLn; return END;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
 %%
+/*
 main () {
   yylex();
 }
+*/
 
