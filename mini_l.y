@@ -47,6 +47,10 @@ exp:		NUMBER                { $$ = $1; }
 			| MINUS exp %prec UMINUS { $$ = -$2; }
 			| L_PAREN exp R_PAREN { $$ = $2; }
 			;
+
+comp:		EQ | NEQ | GT | GTE | LT | LTE
+		;
+
 /*AMANDA:program*/
 /*AMANDA:function*/
 /*AMANDA:declaration*/
