@@ -47,6 +47,19 @@ exp:		NUMBER                { $$ = $1; }
 			| MINUS exp %prec UMINUS { $$ = -$2; }
 			| L_PAREN exp R_PAREN { $$ = $2; }
 			;
+/*AMANDA:program*/
+/*AMANDA:function*/
+/*AMANDA:declaration*/
+/*KATIE:statement*/
+/*AMANDA:bool-expr*/
+/*AMANDA:relation and expr*/
+/*AMANDA:relation expr*/
+/*AMANDA:comp*/
+/*KATIE:expression*/
+/*KATIE:mult expr*/
+/*KATIE:term*/
+/*KATIE:var*/
+
 %%
 
 int main(int argc, char **argv) {

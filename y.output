@@ -1,0 +1,354 @@
+Terminals unused in grammar
+
+   FUNCTION
+   BEGIN_PARAMS
+   END_PARAMS
+   BEGIN_LOCALS
+   END_LOCALS
+   BEGIN_BODY
+   END_BODY
+   INTEGER
+   ARRAY
+   OF
+   IF
+   THEN
+   ENDIF
+   ELSE
+   WHILE
+   DO
+   BEGINLOOP
+   ENDLOOP
+   CONTINUE
+   READ
+   WRITE
+   AND
+   OR
+   NOT
+   TRUE
+   FALSE
+   RETURN
+   SUB
+   ADD
+   MOD
+   NEQ
+   LT
+   GT
+   LTE
+   GTE
+   SEMICOLON
+   COLON
+   COMMA
+   L_SQUARE_BRACKET
+   R_SQUARE_BRACKET
+   ASSIGN
+   IDENTIFIER
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: %empty
+    2      | input line
+
+    3 line: exp EQ END
+
+    4 exp: NUMBER
+    5    | exp PLUS exp
+    6    | exp MINUS exp
+    7    | exp MULT exp
+    8    | exp DIV exp
+    9    | MINUS exp
+   10    | L_PAREN exp R_PAREN
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+FUNCTION (258)
+BEGIN_PARAMS (259)
+END_PARAMS (260)
+BEGIN_LOCALS (261)
+END_LOCALS (262)
+BEGIN_BODY (263)
+END_BODY (264)
+INTEGER (265)
+ARRAY (266)
+OF (267)
+IF (268)
+THEN (269)
+ENDIF (270)
+ELSE (271)
+WHILE (272)
+DO (273)
+BEGINLOOP (274)
+ENDLOOP (275)
+CONTINUE (276)
+READ (277)
+WRITE (278)
+AND (279)
+OR (280)
+NOT (281)
+TRUE (282)
+FALSE (283)
+RETURN (284)
+SUB (285)
+ADD (286)
+MULT (287) 7
+DIV (288) 8
+MOD (289)
+EQ (290) 3
+NEQ (291)
+LT (292)
+GT (293)
+LTE (294)
+GTE (295)
+SEMICOLON (296)
+COLON (297)
+COMMA (298)
+L_PAREN (299) 10
+R_PAREN (300) 10
+L_SQUARE_BRACKET (301)
+R_SQUARE_BRACKET (302)
+ASSIGN (303)
+END (304) 3
+IDENTIFIER (305)
+NUMBER (306) 4
+PLUS (307) 5
+MINUS (308) 6 9
+UMINUS (309)
+
+
+Nonterminals, with rules where they appear
+
+$accept (55)
+    on left: 0
+input (56)
+    on left: 1 2, on right: 0 2
+line (57)
+    on left: 3, on right: 2
+exp (58)
+    on left: 4 5 6 7 8 9 10, on right: 3 5 6 7 8 9 10
+
+
+State 0
+
+    0 $accept: . input $end
+
+    $default  reduce using rule 1 (input)
+
+    input  go to state 1
+
+
+State 1
+
+    0 $accept: input . $end
+    2 input: input . line
+
+    $end     shift, and go to state 2
+    L_PAREN  shift, and go to state 3
+    NUMBER   shift, and go to state 4
+    MINUS    shift, and go to state 5
+
+    line  go to state 6
+    exp   go to state 7
+
+
+State 2
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+State 3
+
+   10 exp: L_PAREN . exp R_PAREN
+
+    L_PAREN  shift, and go to state 3
+    NUMBER   shift, and go to state 4
+    MINUS    shift, and go to state 5
+
+    exp  go to state 8
+
+
+State 4
+
+    4 exp: NUMBER .
+
+    $default  reduce using rule 4 (exp)
+
+
+State 5
+
+    9 exp: MINUS . exp
+
+    L_PAREN  shift, and go to state 3
+    NUMBER   shift, and go to state 4
+    MINUS    shift, and go to state 5
+
+    exp  go to state 9
+
+
+State 6
+
+    2 input: input line .
+
+    $default  reduce using rule 2 (input)
+
+
+State 7
+
+    3 line: exp . EQ END
+    5 exp: exp . PLUS exp
+    6    | exp . MINUS exp
+    7    | exp . MULT exp
+    8    | exp . DIV exp
+
+    MULT   shift, and go to state 10
+    DIV    shift, and go to state 11
+    EQ     shift, and go to state 12
+    PLUS   shift, and go to state 13
+    MINUS  shift, and go to state 14
+
+
+State 8
+
+    5 exp: exp . PLUS exp
+    6    | exp . MINUS exp
+    7    | exp . MULT exp
+    8    | exp . DIV exp
+   10    | L_PAREN exp . R_PAREN
+
+    MULT     shift, and go to state 10
+    DIV      shift, and go to state 11
+    R_PAREN  shift, and go to state 15
+    PLUS     shift, and go to state 13
+    MINUS    shift, and go to state 14
+
+
+State 9
+
+    5 exp: exp . PLUS exp
+    6    | exp . MINUS exp
+    7    | exp . MULT exp
+    8    | exp . DIV exp
+    9    | MINUS exp .
+
+    $default  reduce using rule 9 (exp)
+
+
+State 10
+
+    7 exp: exp MULT . exp
+
+    L_PAREN  shift, and go to state 3
+    NUMBER   shift, and go to state 4
+    MINUS    shift, and go to state 5
+
+    exp  go to state 16
+
+
+State 11
+
+    8 exp: exp DIV . exp
+
+    L_PAREN  shift, and go to state 3
+    NUMBER   shift, and go to state 4
+    MINUS    shift, and go to state 5
+
+    exp  go to state 17
+
+
+State 12
+
+    3 line: exp EQ . END
+
+    END  shift, and go to state 18
+
+
+State 13
+
+    5 exp: exp PLUS . exp
+
+    L_PAREN  shift, and go to state 3
+    NUMBER   shift, and go to state 4
+    MINUS    shift, and go to state 5
+
+    exp  go to state 19
+
+
+State 14
+
+    6 exp: exp MINUS . exp
+
+    L_PAREN  shift, and go to state 3
+    NUMBER   shift, and go to state 4
+    MINUS    shift, and go to state 5
+
+    exp  go to state 20
+
+
+State 15
+
+   10 exp: L_PAREN exp R_PAREN .
+
+    $default  reduce using rule 10 (exp)
+
+
+State 16
+
+    5 exp: exp . PLUS exp
+    6    | exp . MINUS exp
+    7    | exp . MULT exp
+    7    | exp MULT exp .
+    8    | exp . DIV exp
+
+    $default  reduce using rule 7 (exp)
+
+
+State 17
+
+    5 exp: exp . PLUS exp
+    6    | exp . MINUS exp
+    7    | exp . MULT exp
+    8    | exp . DIV exp
+    8    | exp DIV exp .
+
+    $default  reduce using rule 8 (exp)
+
+
+State 18
+
+    3 line: exp EQ END .
+
+    $default  reduce using rule 3 (line)
+
+
+State 19
+
+    5 exp: exp . PLUS exp
+    5    | exp PLUS exp .
+    6    | exp . MINUS exp
+    7    | exp . MULT exp
+    8    | exp . DIV exp
+
+    MULT  shift, and go to state 10
+    DIV   shift, and go to state 11
+
+    $default  reduce using rule 5 (exp)
+
+
+State 20
+
+    5 exp: exp . PLUS exp
+    6    | exp . MINUS exp
+    6    | exp MINUS exp .
+    7    | exp . MULT exp
+    8    | exp . DIV exp
+
+    MULT  shift, and go to state 10
+    DIV   shift, and go to state 11
+
+    $default  reduce using rule 6 (exp)
