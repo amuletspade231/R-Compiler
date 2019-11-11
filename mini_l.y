@@ -55,12 +55,43 @@ comp:		EQ | NEQ | GT | GTE | LT | LTE
 /*AMANDA:function*/
 /*AMANDA:declaration*/
 /*KATIE:statement*/
+Statements	Statement SEMICOLON Statements
+		{printf("Statements -> Statement  SEMICOLON Statements\n");}
+		| Statement SEMICOLON
+		{printf("Statments -> Statement SEMICOLON\n");}
+		;
+
+Statement:	Var ASSIGN Expression
+		{printf("Statement -> Var ASSIGN Expression\n");}
+		| IF BoolExpr THEN Statements ENDIF
+		{printf("Statement -> IF BoolExpr THEN Statements ENDIF\n");}
+		| IF BoolExpr THEN Statements ELSE Statements ENDIF
+		{printf("Statement -> IF BoolExpr THEN Statements ELSE Statements ENDIF\n");}
+		| WHILE BoolExpr BEGINLOOP Statements ENDLOOP
+		{printf("Statement -> WHILE BoolExpr BEGINLOOP Statements ENDLOOP\n");}
+		| DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr
+		{printf("Statement -> DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr\n");}
+		| READ Vars
+		{printf("Statement -> READ Vars\n");}
+		| WRITE Vars
+		{printf("Statement -> WRITE Vars\n");}
+		| CONTINUE
+		{printf("Statement -> CONTINUE\n");}
+		| RETURN Expression
+		{printf("Statement -> RETURN Expression\n");}
+		;
 /*AMANDA:bool-expr*/
 /*AMANDA:relation and expr*/
 /*AMANDA:relation expr*/
 /*AMANDA:comp*/
 /*KATIE:expression*/
-Expression	MultExpr
+Expressions: 	Expression COMMA Expressions
+		{printf("Expressions -> Expression COMMA Expressions\n");}
+		| Expression
+		{printf("Expressions -> Expression\n");}
+		;
+
+Expression:	MultExpr
 		{printf("Expression -> MultExpr\n");}
 		| MultExpr PLUS Expression
 		{printf("Expression -> MultExpr PLUS Expression\n");}
@@ -68,7 +99,7 @@ Expression	MultExpr
 		{printf("Expression -> MultExpr MINUS Expression\n");}
 		;
 /*KATIE:mult expr*/
-MultExpr	Term
+MultExpr:	Term
 		{printf("MultExpr -> Term\n");}
 		| Term MULT MultExpr
 		{printf("MultExpr -> Term MULT MultExpr\n");}
@@ -79,25 +110,27 @@ MultExpr	Term
 		;
 /*KATIE:term*/
 Term:		Var
-		{printf("Term -> Var\n";}
+		{printf("Term -> Var\n");}
 		| MINUS var
-		{printf("Term -> MINUS Var\n";}
+		{printf("Term -> MINUS Var\n");}
 		| NUMBER
-		{printf("Term -> NUMBER\n";}
+		{printf("Term -> NUMBER\n");}
 		| MINUS NUMBER
-		{printf("Term -> MINUS NUMBER\n";}
+		{printf("Term -> MINUS NUMBER\n");}
 		| L_PAREN exp R_PAREN
 		{printf("Term -> L_PAREN Expression R_PAREN\n");}
 		| MINUS L_PARAM Expression R_PARAM
-		{printf("Term -> MINUS L_PAREN Expression R_PAREN\n":)}
-		| IDENTIFIER L_PAREN Expression R_PAREN
-		{printf("Term -> IDENTIFIER L_PAREN Expression R_PAREN\n";)}
-		| IDENTIFIER L_PAREN R_PAREN
-		{printf("Term -> IDENTIFIER L_PAREN Expression R_PAREN\n");}
-		| IDENTIFIER L_PAREN Expression COMMA Expression R_PAREN
-		{printf("Term -> IDENTIFIER L_PAREN Expression COMMA Expression R_PAREN\n");}
+		{printf("Term -> MINUS L_PAREN Expression R_PAREN\n");}
+		| IDENTIFIER L_PAREN Expressions R_PAREN
+		{printf("Term -> IDENTIFIER L_PAREN Expressions R_PAREN\n");}
 		;
 /*KATIE:var*/
+Vars		Var COMMA Vars
+		{printf("Vars -> Var COMMA Vars\n");}
+		| Var
+		{printf("Vars -> Var\n");}
+		;
+
 Var:		IDENTIFIER	
 		{printf("Var -> IDENTIFIER\n");}
 		| IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
