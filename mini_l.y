@@ -60,9 +60,49 @@ comp:		EQ | NEQ | GT | GTE | LT | LTE
 /*AMANDA:relation expr*/
 /*AMANDA:comp*/
 /*KATIE:expression*/
+Expression	MultExpr
+		{printf("Expression -> MultExpr\n");}
+		| MultExpr PLUS Expression
+		{printf("Expression -> MultExpr PLUS Expression\n");}
+		| MultExpr MINUS Expression
+		{printf("Expression -> MultExpr MINUS Expression\n");}
+		;
 /*KATIE:mult expr*/
+MultExpr	Term
+		{printf("MultExpr -> Term\n");}
+		| Term MULT MultExpr
+		{printf("MultExpr -> Term MULT MultExpr\n");}
+		| Term DIV MultExpr
+		{printf("MultExpr -> Term DIV MultExpr\n");}
+		| Term MOD MultExpr
+		{printf("MultExpr -> Term MOD MultExpr\n");}
+		;
 /*KATIE:term*/
+Term:		Var
+		{printf("Term -> Var\n";}
+		| MINUS var
+		{printf("Term -> MINUS Var\n";}
+		| NUMBER
+		{printf("Term -> NUMBER\n";}
+		| MINUS NUMBER
+		{printf("Term -> MINUS NUMBER\n";}
+		| L_PAREN exp R_PAREN
+		{printf("Term -> L_PAREN Expression R_PAREN\n");}
+		| MINUS L_PARAM Expression R_PARAM
+		{printf("Term -> MINUS L_PAREN Expression R_PAREN\n":)}
+		| IDENTIFIER L_PAREN Expression R_PAREN
+		{printf("Term -> IDENTIFIER L_PAREN Expression R_PAREN\n";)}
+		| IDENTIFIER L_PAREN R_PAREN
+		{printf("Term -> IDENTIFIER L_PAREN Expression R_PAREN\n");}
+		| IDENTIFIER L_PAREN Expression COMMA Expression R_PAREN
+		{printf("Term -> IDENTIFIER L_PAREN Expression COMMA Expression R_PAREN\n");}
+		;
 /*KATIE:var*/
+Var:		IDENTIFIER	
+		{printf("Var -> IDENTIFIER\n");}
+		| IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
+		{printf("Var -> IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET\n");}
+		;
 
 %%
 
