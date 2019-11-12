@@ -59,6 +59,8 @@ Declarations:	Declaration SEMICOLON
 		{printf("Declarations -> Declaration SEMICOLON\n");}
 		| Declaration SEMICOLON Declarations
 		{printf("Declarations -> Declaration SEMICOLON Declarations\n");}
+		|
+		{printf("Declarations -> Epsilon\n");}
 
 Declaration:	IDENTIFIER COMMA Declaration
 		{printf("Declaration -> IDENTIFIER COMMA Declaration\n");}
