@@ -48,7 +48,7 @@ COMMENT		[#][#].*\n
 "false"		{curPos += yyleng; return FALSE;}
 "return"	{curPos += yyleng; return RETURN;}
 
-"-"             {curPos += yyleng; return SUB;}
+"-"             {curPos += yyleng; return MINUS;}
 "+"             {curPos += yyleng; return ADD;}
 "*"             {curPos += yyleng; return MULT;}
 "/"             {curPos += yyleng; return DIV;}
