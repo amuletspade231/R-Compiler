@@ -78,7 +78,6 @@ COMMENT		[#][#].*\n
 " "		{}
 "	"	{curPos += yyleng;}
 {COMMENT}	{curPos = 1; ++curLn;}
-\n              {curPos = 1; ++curLn; return END;}
 .               {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", curLn, curPos, yytext); exit(0);}
 
 %%
