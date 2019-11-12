@@ -49,7 +49,7 @@ COMMENT		[#][#].*\n
 "return"	{curPos += yyleng; return RETURN;}
 
 "-"             {curPos += yyleng; return MINUS;}
-"+"             {curPos += yyleng; return ADD;}
+"+"             {curPos += yyleng; return PLUS;}
 "*"             {curPos += yyleng; return MULT;}
 "/"             {curPos += yyleng; return DIV;}
 "%"             {curPos += yyleng; return MOD;}
