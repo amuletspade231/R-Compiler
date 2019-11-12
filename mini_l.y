@@ -11,7 +11,7 @@
 %union{
   double dval;
   int ival;
-  char** sval;
+  char* sval;
 }
 
 %error-verbose
@@ -178,7 +178,7 @@ Vars:		Var COMMA Vars
 		;
 
 Var:		IDENTIFIER	
-		{printf("Var -> IDENTIFIER %s\n", $1);}
+		{printf("Var -> IDENTIFIER\n");}
 		| IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
 		{printf("Var -> IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET\n");}
 		;
