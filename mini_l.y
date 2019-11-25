@@ -7,7 +7,8 @@
  extern int curLn;
  extern int curPos;
  extern ASTNode* root
- FILE * yyin;
+ extern FILE * yyin;
+ extern int yylex();
 %}
 
 %union{
