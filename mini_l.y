@@ -5,7 +5,8 @@
  void yyerror(const char *msg);
  extern int curLn;
  extern int curPos;
- FILE * yyin;
+ extern FILE * yyin;
+ extern int yylex();
 %}
 
 %union{

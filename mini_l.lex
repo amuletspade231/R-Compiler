@@ -8,7 +8,7 @@
  */
 
 %{
-	#include "y.tab.h"
+	#include "mini_l.tab.h"
 	int curPos = 1, curLn = 1;
 %}
 
