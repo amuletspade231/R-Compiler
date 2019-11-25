@@ -1,10 +1,12 @@
-/* calculator. */
 %{
  #include <stdio.h>
  #include <stdlib.h>
+ #include "generator.hpp"
+
  void yyerror(const char *msg);
  extern int curLn;
  extern int curPos;
+ extern ASTNode* root
  FILE * yyin;
 %}
 
@@ -30,23 +32,7 @@
 %left L_PAREN R_PAREN
 
 
-%%/* 
-input:	
-			| input line
-			;
-
-line:		exp EQ END         { printf("\t%f\n", $1);}
-			;
-
-exp:		NUMBER                { $$ = $1; }
-			| exp PLUS exp        { $$ = $1 + $3; }
-			| exp MINUS exp       { $$ = $1 - $3; }
-			| exp MULT exp        { $$ = $1 * $3; }
-			| exp DIV exp         { if ($3==0) yyerror("divide by zero"); else $$ = $1 / $3; }
-			| MINUS exp %prec UMINUS { $$ = -$2; }
-			| L_PAREN exp R_PAREN { $$ = $2; }
-			;
-*/
+%% 
 /*AMANDA:program*/
 Program:	Function Program
 		{printf("Program -> Function Program\n");}
@@ -159,7 +145,46 @@ Term:		Var
 		{printf("Term -> Var\n");}
 		| MINUS Var
 		{printf("Term -> MINUS Var\n");}
-		| NUMBER
+yntax	Semantics
+Function Related Statements
+param name	adds the named parameter to the queue of parameters for the next function call
+call name, dest	calls the function with the specified name, storing the result in dest
+ret src	returns from the current function, passing src as the return value. src can be an immediate
+Variable Declaration Statements
+. name	declares a name for a scalar variable
+.[] name, n	declares a name for an array variable consisting of n (must be a positive whole number) elements, with name[0] being the first element
+Copy Statements
+= dst, src	dst = src (src can be an immediate)
+Array Access Statements
+=[] dst, src, index	dst = src[index] (index can be an immediate)
+[]= dst, index, src	dst[index] = src (index and src can be immediates)
+Input/Output Statements
+.< dst	read a value into dst from standard in
+.[]< dst, index	read a value into dst[index] from standard in
+.> src	write the value of src into standard out
+.[]> src, index	write the value of src[index] into standard out
+Arithmetic Operator Statements (one or both source operands can be immediates)
++ dst, src1, src2	dst = src1 + src2
+- dst, src1, src2	dst = src1 - src2
+* dst, src1, src2	dst = src1 * src2
+/ dst, src1, src2	dst = src1 / src2
+% dst, src1, src2	dst = src1 % src2
+Comparison Operator Statements (one or both source operands can be immediates)
+< dst, src1, src2	dst = src1 < src2
+<= dst, src1, src2	dst = src1 <= src2
+!= dst, src1, src2	dst = src1 != src2
+== dst, src1, src2	dst = src1 == src2
+>= dst, src1, src2	dst = src1 >= src2
+> dst, src1, src2	dst = src1 > src2
+Logical Operator Statements (one or both source operands can be immediates)
+|| dst, src1, src2	dst = src1 || src2 (logical OR)
+&& dst, src1, src2	dst = src1 && src2 (logical AND)
+! dst, src	dst = !src (logical NOT)
+Label Declaration Statements
+: label	declares a label
+Branch Statements
+:= label	goto label
+?:= label, predicate	if predicate is true (1) goto label
 		{printf("Term -> NUMBER\n");}
 		| MINUS NUMBER
 		{printf("Term -> MINUS NUMBER\n");}
