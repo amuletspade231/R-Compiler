@@ -10,4 +10,4 @@ mini_l: lex.yy.c mini_l.tab.c mini_l.tab.h
 	g++ -g -O0 -std=c++11 -Werror=return-type -o mini_l mini_l.tab.c lex.yy.c -l fl
 
 clean:
-	rm mini_l mini_l.tab.c lex.yy.c mini_c.tab.h
+	rm mini_l mini_l.tab.c lex.yy.c mini_l.tab.h
