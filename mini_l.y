@@ -35,13 +35,18 @@
 
 %% 
 /*AMANDA:program*/
-Program:	Function Program
-		{printf("Program -> Function Program\n");}
+Program:	Functions
+		{ $$ = $1; root = $$; }
+
+Functions:	Function
+		{ $$ new FunctionList(); $$->append($1); }
+		Function Functions 
+		{ $$ = $2; $2->append($1); /*this append will be a "push front"*/ }
 		| 
-		{printf("Program -> Epsilon\n");}
+		{}
 /*AMANDA:function*/
 Function:	FUNCTION IDENTIFIER SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY
-		{printf("Function -> FUNCTION IDENTIFIER SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY\n");}
+		{ $$ = new Function($2, $5, $8, $11); }
 /*AMANDA:declaration*/
 Declarations:	Declaration SEMICOLON
 		{printf("Declarations -> Declaration SEMICOLON\n");}
