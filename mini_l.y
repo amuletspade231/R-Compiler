@@ -151,6 +151,7 @@ Term:		Var
 		{printf("Term -> Var\n");}
 		| MINUS Var
 		{printf("Term -> MINUS Var\n");}
+		| NUMBER
 		{printf("Term -> NUMBER\n");}
 		| MINUS NUMBER
 		{printf("Term -> MINUS NUMBER\n");}
