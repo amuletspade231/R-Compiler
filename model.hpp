@@ -154,6 +154,35 @@ class WhileStatement : public Statement
     StatementList *while_block;
 };
 
+class DoWhileStatement : public Statement
+{
+  public: 
+    DoWhileStatement(StatementList *loop_block, Expr *bool_expr)
+	: loop_block(loop_block), bool_expr(bool_expr) {}
+
+    virtual std::string gencode() {
+	std::stringstream ss;
+	std::string begin_loop, end_loop, condition;
+	begin_loop = Generator::make_label();
+	end_loop = Generator::make_label();
+	condition = Generator::make_label();
+
+	ss << ": " << begin_loop << '\n';
+	ss << loop_block->gencode();
+	ss << ": " << condition << '\n';
+	ss << bool_expr->gencode();
+	ss << "?:= " << begin_loop << ", " << bool_expr->ret_var << '\n';
+	ss << ":= " << end_loop << '\n';
+	ss << ": " << end_loop << '\n';
+
+	return ss.str();
+    }
+
+  protected:
+    Expr *bool_expr;
+    StatementList *loop_block;
+};
+
 class IfElseStatement : public Statement
 {
   public:
