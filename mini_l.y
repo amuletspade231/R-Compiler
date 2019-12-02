@@ -69,15 +69,15 @@ Statements:	Statement SEMICOLON Statements
 		;
 
 Statement:	Var ASSIGN Expression
-		{printf("Statement -> Var ASSIGN Expression\n");}
+		{$$ = new DefineStatement($1, $3);}
 		| IF BoolExpr THEN Statements ENDIF
 		{printf("Statement -> IF BoolExpr THEN Statements ENDIF\n");}
 		| IF BoolExpr THEN Statements ELSE Statements ENDIF
-		{printf("Statement -> IF BoolExpr THEN Statements ELSE Statements ENDIF\n");}
+		{$$ = new IfElseStatement($2, $4, $6);}
 		| WHILE BoolExpr BEGINLOOP Statements ENDLOOP
 		{$$ = new WhileStatement($2, $4);}
 		| DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr
-		{printf("Statement -> DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr\n");}
+		{$$ = new DoWhileStatement($2, $4);}
 		| READ Vars
 		{printf("Statement -> READ Vars\n");}
 		| WRITE Vars
