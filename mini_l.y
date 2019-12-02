@@ -39,7 +39,7 @@ Program:	Functions
 		{ $$ = $1; root = $$; }
 
 Functions:	Function
-		{ $$ new FunctionList(); $$->append($1); }
+		{ $$ = new FunctionList(); $$->append($1); }
 		Function Functions 
 		{ $$ = $2; $2->append($1); /*this append will be a "push front"*/ }
 		| 
@@ -63,9 +63,9 @@ Declaration:	IDENTIFIER COMMA Declaration
 		{printf("Declaration -> IDENTIFIER COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");}
 /*KATIE:statement*/
 Statements:	Statement SEMICOLON Statements
-		{printf("Statements -> Statement  SEMICOLON Statements\n");}
+		{$$ = $2; $2->append($1); /*append by push_front*/ }
 		| Statement SEMICOLON
-		{printf("Statments -> Statement SEMICOLON\n");}
+		{$$ = new StatementList(); $$->append($1);}
 		;
 
 Statement:	Var ASSIGN Expression
@@ -75,7 +75,7 @@ Statement:	Var ASSIGN Expression
 		| IF BoolExpr THEN Statements ELSE Statements ENDIF
 		{printf("Statement -> IF BoolExpr THEN Statements ELSE Statements ENDIF\n");}
 		| WHILE BoolExpr BEGINLOOP Statements ENDLOOP
-		{printf("Statement -> WHILE BoolExpr BEGINLOOP Statements ENDLOOP\n");}
+		{$$ = new WhileStatement($2, $4);}
 		| DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr
 		{printf("Statement -> DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr\n");}
 		| READ Vars
