@@ -77,7 +77,7 @@ Statement:	Var ASSIGN Expression
 		| WHILE BoolExpr BEGINLOOP Statements ENDLOOP
 		{$$ = new WhileStatement($2, $4);}
 		| DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr
-		{$$ = new DoWhileStatement($2, $4);}
+		{$$ = new DoWhileStatement($3, $6);}
 		| READ Vars
 		{printf("Statement -> READ Vars\n");}
 		| WRITE Vars
