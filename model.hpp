@@ -96,6 +96,23 @@ class ExprNumber : public Expr
     int number;
 };
 
+class ExprArray : public Expr
+{
+  public:
+    ExprArray(ArrayVar* arr) : arr(arr) {}
+    virtual std::string gencode()
+    {
+	std::string temp = Generator::make_var();
+	ret_var = temp;
+	std::stringstream ss;
+	ss << "=[] " << temp << ", " << arr->ret_var << '\n';
+	return ss.str();	
+    }
+
+  protected:
+    ArrayVar* arr;
+};
+
 class Statement : public ASTNode
 {
 };
@@ -250,4 +267,42 @@ class DefineStatement : public Statement
   protected:
     std::string name;
     Expr *expr = nullptr;
+};
+
+class Variable : public ASTNode
+{
+};
+
+class IdVar : public Variable
+{
+  public:
+    IDVar(std::string name) : name(name) {}
+
+    virtual std::string gencode()
+    {
+	ret_var = name;
+	return "";	
+    }
+
+  protected:
+    std::string name;
+};
+
+class ArrayVar : public Variable
+{
+  public:
+    ArrayVar(std::string name, Expr* exprIndex) : name(name), exprIndex(exprIndex) {}
+
+    virtual std::string gencode()
+    {
+	std::string temp = Generator::make_var();
+	ret_var = name + ", " + temp;
+	std::stringstream ss;
+	ss << exprIndex->gencode();
+	return ss.str();	
+    }
+
+  protected:
+    std::string name;
+    Expr* exprIndex;
 };
