@@ -63,7 +63,7 @@ Declaration:	IDENTIFIER COMMA Declaration
 		{printf("Declaration -> IDENTIFIER COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");}
 /*KATIE:statement*/
 Statements:	Statement SEMICOLON Statements
-		{$$ = $2; $2->append($1); /*append by push_front*/ }
+		{$$ = $3; $3->append($1); /*append by push_front*/ }
 		| Statement SEMICOLON
 		{$$ = new StatementList(); $$->append($1);}
 		;
@@ -164,15 +164,15 @@ Term:		Var
 		;
 /*KATIE:var*/
 Vars:		Var COMMA Vars
-		{printf("Vars -> Var COMMA Vars\n");}
+		{$$ = $3; $3->append($1);}
 		| Var
-		{printf("Vars -> Var\n");}
+		{$$ = new VarList(); $$->append($1);}
 		;
 
 Var:		IDENTIFIER	
-		{printf("Var -> IDENTIFIER\n");}
+		{$$ = new IdVar($1);}
 		| IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
-		{printf("Var -> IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET\n");}
+		{$$ = new ArrayVar($1, $3);}
 		;
 
 %%

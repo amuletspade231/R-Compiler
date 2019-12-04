@@ -273,6 +273,31 @@ class Variable : public ASTNode
 {
 };
 
+class VarList : public ASTNode
+{
+  public:
+    VarList() {}
+    virtual ~VarList()
+    {
+	for (auto v : var_vec)
+	{
+		delete v;
+	}
+    }
+    void append(Variable *v) { var_vec.push_back(v);}
+
+    virtual std::string gencode() {
+	std::stringstream ss;
+	for (auto v : var_vec) {
+	    ss << v->gencode();
+	}
+	return ss.str();
+    }
+
+  protected: 
+    std::vector<Variable *> var_vec;
+};
+
 class IdVar : public Variable
 {
   public:
