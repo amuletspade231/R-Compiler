@@ -37,6 +37,29 @@ class ASTNode
     virtual std::string gencode() = 0;
 };
 
+class FunctionCall : public ASTNode
+{
+  public:
+    FunctionCall(IdVar func, ExprList *param) : func(func), param(param) {}
+    virtual std::string gencode()
+    {
+	std::stringstream ss;
+	std::string temp = Generator::make_var();
+	param->gencode();
+	for( p : param->expr_list ) {
+		ss << "param " << p->ret_var << '\n';
+	} 
+	ss << "call " << func->ret_var << ", " << temp << '\n';
+	ret_var = temp;
+	return ss.str();
+    }
+
+  protected:
+    FunctionCall() {}
+    IdVar func;
+    ExprList *param;
+}
+
 class Expr : public ASTNode
 {
   public:
@@ -74,6 +97,29 @@ class Expr : public ASTNode
     Expr *p1 = nullptr, *p2 = nullptr;
     std::string op;
 };
+
+class ExprList : Expr
+{
+  public:
+    ExprList() {}
+    virtual ~ExprList()
+    {
+	for(auto e : expr_list) { delete e; }
+    }
+    void append(Expr *e) { expr_list.push_back(e); }
+
+    virtual std::string gencode()
+    {
+	std::stringstream ss;
+	for(auto e : expr_list) { 
+	    ss << e->gencode();
+	}
+	return ss.str();
+    }
+
+  protected:
+    std::vector<Expr *> expr_list;
+}
 
 class ExprID : public Expr
 {
