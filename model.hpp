@@ -50,10 +50,20 @@ class Expr : public ASTNode
     virtual std::string gencode()
     {
         std::stringstream ss;
-        ss << p1->gencode() << p2->gencode();
-        std::string temp = Generator::make_var();
-        ss << op << ' ' << temp << ", " << p1->ret_var << ", " << p2->ret_var << '\n';
-        ret_var = temp;
+	if(p1 != NULL) {
+            ss << p1->gencode() << p2->gencode();
+            std::string temp = Generator::make_var();
+            ss << op << ' ' << temp << ", " << p1->ret_var << ", " << p2->ret_var << '\n';
+            ret_var = temp;
+	} else {
+	//if p1 is null, that means expr is a term -var, -num, or -(expr)
+	    ss << p2->gencode();
+	    ss::string temp0 = Generator::make_var();
+	    ss << "= " << temp0 << ", 0" << '\n';
+	    ss::string temp1 = Generator::make_var();
+	    ss << op << ' ' << temp1 << ", " << temp0 << ", " << p2->ret_var << '\n';
+	    ret_var = temp1;
+	}
         return ss.str();
     }
 

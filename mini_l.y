@@ -148,19 +148,19 @@ MultExpr:	Term
 		;
 /*KATIE:term*/
 Term:		Var
-		{printf("Term -> Var\n");}
+		{$$ = $1;}
 		| MINUS Var
-		{printf("Term -> MINUS Var\n");}
+		{$$ = new Expr(NULL, "-", $2);}
 		| NUMBER
-		{printf("Term -> NUMBER\n");}
+		{$$ = new ExprNum($1);}
 		| MINUS NUMBER
-		{printf("Term -> MINUS NUMBER\n");}
+		{$$ = new Expr(NULL, "-", new ExprNum($2));}
 		| L_PAREN Expression R_PAREN
-		{printf("Term -> L_PAREN Expression R_PAREN\n");}
+		{$$ = $2;}
 		| MINUS L_PAREN Expression R_PAREN
-		{printf("Term -> MINUS L_PAREN Expression R_PAREN\n");}
+		{$$ = new Expr(NULL, "-", $3);}
 		| IDENTIFIER L_PAREN Expressions R_PAREN
-		{printf("Term -> IDENTIFIER L_PAREN Expressions R_PAREN\n");}
+		{$$ = new FunctionCall($1, $2);}
 		;
 /*KATIE:var*/
 Vars:		Var COMMA Vars
