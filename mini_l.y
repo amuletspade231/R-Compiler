@@ -79,9 +79,9 @@ Statement:	Var ASSIGN Expression
 		| DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr
 		{$$ = new DoWhileStatement($3, $6);}
 		| READ Vars
-		{printf("Statement -> READ Vars\n");}
+		{$$ = new ReadStatement($2);}
 		| WRITE Vars
-		{printf("Statement -> WRITE Vars\n");}
+		{$$ = new WriteStatement($2);}
 		| CONTINUE
 		{printf("Statement -> CONTINUE\n");}
 		| RETURN Expression
@@ -126,7 +126,7 @@ Comp:		EQ
 Expressions: 	Expression COMMA Expressions
 		{$$ = $3; $3->append($1);}
 		| Expression
-		{$$ = new ExpreList(); $$->append($1);}
+		{$$ = new ExprList(); $$->append($1);}
 		;
 
 Expression:	MultExpr

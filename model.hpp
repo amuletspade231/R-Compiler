@@ -357,6 +357,15 @@ class ReadStatement : public Statement
     {
 	std::stringstream ss;
 	/*TODO: EVALUATE VAR IF ARRAY*/
+	size_t id = var->ret_var.find(",");
+	if (id == string::npos) {
+	    //not an arr
+	    ss << ".< " << var->ret_var << '\n';
+	} else {
+	    //is an array
+	    ss << ".[]< " << var->ret_var << '\n';
+	}
+	return ss.str();
     }
 
   protected:
@@ -372,6 +381,13 @@ class WriteStatement : public Statement
     {
 	std::stringstream ss;
 	/*TODO: EVALUATE VAR IF ARRAY*/
+	size_t id = var->ret.find(",");
+	if (id == string::npos) {
+	    ss << ".> " << var->ret_var << '\n';
+	} else {
+	    ss << ".[]> " << var->ret_var << '\n';
+	}
+	return ss.str();
     }
 
   protected:
