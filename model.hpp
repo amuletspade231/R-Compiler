@@ -348,6 +348,36 @@ class DefineStatement : public Statement
     Expr *expr = nullptr;
 };
 
+class ReadStatement : public Statement
+{
+  public: 
+    ReadStatement(Var *var) : var(var) {}
+
+    virtual std::string gencode()
+    {
+	std::stringstream ss;
+	/*TODO: EVALUATE VAR IF ARRAY*/
+    }
+
+  protected:
+    Var *var;
+};
+
+class WriteStatement : public Statement
+{
+  public:
+    WriteStatement(Var *var) : var(var) {}
+
+    virtual std::string gencode()
+    {
+	std::stringstream ss;
+	/*TODO: EVALUATE VAR IF ARRAY*/
+    }
+
+  protected:
+    Var *var;
+};
+
 class Variable : public ASTNode
 {
 };
