@@ -124,27 +124,27 @@ Comp:		EQ
 		;
 /*KATIE:expression*/
 Expressions: 	Expression COMMA Expressions
-		{printf("Expressions -> Expression COMMA Expressions\n");}
+		{$$ = $3; $3->append($1);}
 		| Expression
-		{printf("Expressions -> Expression\n");}
+		{$$ = new ExpreList(); $$->append($1);}
 		;
 
 Expression:	MultExpr
-		{printf("Expression -> MultExpr\n");}
+		{$$ = $1;}
 		| MultExpr PLUS Expression
-		{printf("Expression -> MultExpr PLUS Expression\n");}
+		{$$ = new Expr($1, "+", $3)}
 		| MultExpr MINUS Expression
-		{printf("Expression -> MultExpr MINUS Expression\n");}
+		{$$ = new Expr($1, "-", $3);}
 		;
 /*KATIE:mult expr*/
 MultExpr:	Term
-		{printf("MultExpr -> Term\n");}
+		{$$ = $1;}
 		| Term MULT MultExpr
-		{printf("MultExpr -> Term MULT MultExpr\n");}
+		{$$ = new Expr($1, "*", $3);}
 		| Term DIV MultExpr
-		{printf("MultExpr -> Term DIV MultExpr\n");}
+		{$$ = new Expr($1, "/", $3);}
 		| Term MOD MultExpr
-		{printf("MultExpr -> Term MOD MultExpr\n");}
+		{$$ = new Expr($1, "%", $3);}
 		;
 /*KATIE:term*/
 Term:		Var
