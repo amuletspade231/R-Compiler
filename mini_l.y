@@ -89,38 +89,38 @@ Statement:	Var ASSIGN Expression
 		;
 /*AMANDA:bool-expr*/
 BoolExpr:	RelationAndExpr
-		{printf("BoolExpr -> RelationAndExpr\n");}
+		{ $$ = $1; }
 		| RelationAndExpr OR RelationAndExpr
-		{printf("BoolExpr -> RelationAndExpr OR RelationAndExpr\n");}
+		{ $$ = new Expr($1, "||", $3); }
 /*AMANDA:relation and expr*/
 RelationAndExpr: RelationExpr
-		 {printf("RelationAndExpr -> RelationExpr\n");}
+		 { $$ = $1; }
 		 | RelationExpr AND RelationExpr
-		 {printf("RelationAndExpr -> RelationExpr AND RelationExpr\n");}
+		 { $$ = new Expr($1, "&&", $3); }
 /*AMANDA:relation expr*/
 RelationExpr:	NOT RelationExpr
-		{printf("RelationExpr -> NOT RelationExpr\n");}
+		{ $$ = new Expr(NULL, "!", $2); }
 		| Expression Comp Expression
-		{printf("RelationExpr -> Expression Comp Expression\n");}
+		{ $$ = new Expr($1, $2, $3); }
 		| TRUE
-		{printf("RelationExpr -> TRUE\n");}
+		{ $$ = new ExprBool(true); }
 		| FALSE
-		{printf("RelationExpr -> FALSE\n");}
+		{ $$ = new ExprBool(false); }
 		| L_PAREN BoolExpr R_PAREN
-		{printf("RelationExpr -> L_PAREN BoolExpr R_PAREN\n");}
+		{ $$ = $2; }
 /*AMANDA:comp*/
 Comp:		EQ 
-		{printf("Comp -> EQ\n");}
+		{ $$ = "=="; }
 		| NEQ
-		{printf("Comp -> NEQ\n");}
+		{ $$ = "!="; }
 		| GT 
-		{printf("Comp -> GT\n");}
+		{ $$ = ">"; }
 		| GTE 
-		{printf("Comp -> GTE\n");}
+		{ $$ = ">="; }
 		| LT 
-		{printf("Comp -> LT\n");}
+		{ $$ = "<"; }
 		| LTE
-		{printf("Comp -> LTE\n");}
+		{ $$ = "<="; }
 		;
 /*KATIE:expression*/
 Expressions: 	Expression COMMA Expressions
