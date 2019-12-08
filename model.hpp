@@ -79,13 +79,19 @@ class Expr : public ASTNode
             ss << op << ' ' << temp << ", " << p1->ret_var << ", " << p2->ret_var << '\n';
             ret_var = temp;
 	} else {
-	//if p1 is null, that means expr is a term -var, -num, or -(expr)
+	//if p1 is null, that means expr has a unary op (- or !)
 	    ss << p2->gencode();
-	    ss::string temp0 = Generator::make_var();
-	    ss << "= " << temp0 << ", 0" << '\n';
-	    ss::string temp1 = Generator::make_var();
-	    ss << op << ' ' << temp1 << ", " << temp0 << ", " << p2->ret_var << '\n';
-	    ret_var = temp1;
+	    if (op == "-") {
+	    	std::string temp0 = Generator::make_var();
+	    	ss << "= " << temp0 << ", 0" << '\n';
+	    	std::string temp1 = Generator::make_var();
+	    	ss << op << ' ' << temp1 << ", " << temp0 << ", " << p2->ret_var << '\n';
+	    	ret_var = temp1;
+	    } else { //op == "!"
+		std::string temp = Generator::make_var();
+		ss << op << ' ' << temp << ", " << p2->ret_var << '\n';
+		ret_var = temp;
+	    }
 	}
         return ss.str();
     }
@@ -150,6 +156,23 @@ class ExprNumber : public Expr
 
   protected:
     int number;
+};
+
+class ExprBool : public Expr
+{
+  public:
+    ExprBool(std::string bval) : bval(bval) {}
+    virtual std::string gencode()
+    {
+        std::string temp = Generator::make_var();
+        ret_var = temp;
+        std::stringstream ss;
+        ss << "= " << temp << ", " << bval << '\n';
+        return ss.str();
+    }
+
+  protected:
+    std::string bval;
 };
 
 class ExprArray : public Expr
