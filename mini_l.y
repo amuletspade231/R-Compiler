@@ -1,7 +1,7 @@
 %{
  #include <stdio.h>
  #include <stdlib.h>
- #include "generator.hpp"
+ #include "model.hpp"
 
  void yyerror(const char *msg);
  extern int curLn;
@@ -15,12 +15,35 @@
   double dval;
   int ival;
   char* sval;
+  Function *func;
+  FunctionList *func_list;
+  Expr *exp;
+  ExprList *exp_list;
+  ExprID *exp_id;
+  ExprArray *exp_arr;
+  Statement *stat;
+  StatementList *stat_list;
+  Declaration *dec;
+  Variable *var;
+  VarList *var_list;
 }
+
+%type<func> Function
+%type<func_list> Functions Program
+%type<dec> Declaration
+%type<stat_list> Declarations Statements
+%type<stat> Statement
+%type<exp> BoolExpr RelationAndExpr RelationExpr Expression MultExpr Term
+%type<exp_list> Expressions
+%type<var_list> Vars
+%type<var> Var
+%type<sval> Comp
 
 %error-verbose
 %start Program
-%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN MINUS PLUS MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END NUMBER
+%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN MINUS PLUS MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END
 %token <sval> IDENTIFIER
+%token <ival> NUMBER
 %left ASSIGN
 %left OR
 %left AND
@@ -40,7 +63,7 @@ Program:	Functions
 
 Functions:	Function
 		{ $$ = new FunctionList(); $$->append($1); }
-		Function Functions 
+		| Function Functions 
 		{ $$ = $2; $2->append($1); /*this append will be a "push front"*/ }
 		| 
 		{}
@@ -49,7 +72,7 @@ Function:	FUNCTION IDENTIFIER SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEG
 		{ $$ = new Function($2, $5, $8, $11); }
 /*AMANDA:declaration*/
 Declarations:	Declaration SEMICOLON
-		{ $$ = new StatementList(); $$->append}
+		{ $$ = new StatementList(); $$->append($1);}
 		| Declaration SEMICOLON Declarations
 		{ $$ = $3; $$->append($1);}
 		|
@@ -152,15 +175,15 @@ Term:		Var
 		| MINUS Var
 		{ $$ = new Expr(NULL, "-", $2);}
 		| NUMBER
-		{ $$ = new ExprNum($1);}
+		{ $$ = new ExprNumber($1);}
 		| MINUS NUMBER
-		{ $$ = new Expr(NULL, "-", new ExprNum($2));}
+		{ $$ = new Expr(NULL, "-", new ExprNumber($2));}
 		| L_PAREN Expression R_PAREN
 		{ $$ = $2;}
 		| MINUS L_PAREN Expression R_PAREN
 		{ $$ = new Expr(NULL, "-", $3);}
 		| IDENTIFIER L_PAREN Expressions R_PAREN
-		{ $$ = new FunctionCall($1, $2);}
+		{ $$ = new FunctionCall($1, $3);}
 		;
 /*KATIE:var*/
 Vars:		Var COMMA Vars
