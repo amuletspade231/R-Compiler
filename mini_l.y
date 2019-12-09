@@ -49,39 +49,39 @@ Function:	FUNCTION IDENTIFIER SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEG
 		{ $$ = new Function($2, $5, $8, $11); }
 /*AMANDA:declaration*/
 Declarations:	Declaration SEMICOLON
-		{$$ = new StatementList(); $$->append}
+		{ $$ = new StatementList(); $$->append}
 		| Declaration SEMICOLON Declarations
-		{$$ = $3; $$->append($1);}
+		{ $$ = $3; $$->append($1);}
 		|
 		{}
 
 Declaration:	IDENTIFIER COMMA Declaration
-		{$$ = $3; $$->append($1); /*append id to id list of declaration*/}
+		{ $$ = $3; $$->append($1); /*append id to id list of declaration*/}
 		| IDENTIFIER COLON INTEGER
-		{$$ = new Declaration($1);}
+		{ $$ = new Declaration($1);}
 		| IDENTIFIER COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
-		{$$ = new Declaration($1, $5);}
+		{ $$ = new Declaration($1, $5);}
 /*KATIE:statement*/
 Statements:	Statement SEMICOLON Statements
-		{$$ = $3; $3->append($1); /*append by push_front*/ }
+		{ $$ = $3; $3->append($1); /*append by push_front*/ }
 		| Statement SEMICOLON
-		{$$ = new StatementList(); $$->append($1);}
+		{ $$ = new StatementList(); $$->append($1);}
 		;
 
 Statement:	Var ASSIGN Expression
-		{$$ = new DefineStatement($1, $3);}
+		{ $$ = new DefineStatement($1, $3);}
 		| IF BoolExpr THEN Statements ENDIF
-		{printf("Statement -> IF BoolExpr THEN Statements ENDIF\n");}
+		{ $$ = new IfStatement($2, $4);}
 		| IF BoolExpr THEN Statements ELSE Statements ENDIF
-		{$$ = new IfElseStatement($2, $4, $6);}
+		{ $$ = new IfElseStatement($2, $4, $6);}
 		| WHILE BoolExpr BEGINLOOP Statements ENDLOOP
-		{$$ = new WhileStatement($2, $4);}
+		{ $$ = new WhileStatement($2, $4);}
 		| DO BEGINLOOP Statements ENDLOOP WHILE BoolExpr
-		{$$ = new DoWhileStatement($3, $6);}
+		{ $$ = new DoWhileStatement($3, $6);}
 		| READ Vars
-		{$$ = new ReadStatement($2);}
+		{ $$ = new ReadStatement($2);}
 		| WRITE Vars
-		{$$ = new WriteStatement($2);}
+		{ $$ = new WriteStatement($2);}
 		| CONTINUE
 		{printf("Statement -> CONTINUE\n");}
 		| RETURN Expression
@@ -124,55 +124,55 @@ Comp:		EQ
 		;
 /*KATIE:expression*/
 Expressions: 	Expression COMMA Expressions
-		{$$ = $3; $3->append($1);}
+		{ $$ = $3; $3->append($1);}
 		| Expression
-		{$$ = new ExprList(); $$->append($1);}
+		{ $$ = new ExprList(); $$->append($1);}
 		;
 
 Expression:	MultExpr
-		{$$ = $1;}
+		{ $$ = $1;}
 		| MultExpr PLUS Expression
-		{$$ = new Expr($1, "+", $3)}
+		{ $$ = new Expr($1, "+", $3)}
 		| MultExpr MINUS Expression
-		{$$ = new Expr($1, "-", $3);}
+		{ $$ = new Expr($1, "-", $3);}
 		;
 /*KATIE:mult expr*/
 MultExpr:	Term
-		{$$ = $1;}
+		{ $$ = $1;}
 		| Term MULT MultExpr
-		{$$ = new Expr($1, "*", $3);}
+		{ $$ = new Expr($1, "*", $3);}
 		| Term DIV MultExpr
-		{$$ = new Expr($1, "/", $3);}
+		{ $$ = new Expr($1, "/", $3);}
 		| Term MOD MultExpr
-		{$$ = new Expr($1, "%", $3);}
+		{ $$ = new Expr($1, "%", $3);}
 		;
 /*KATIE:term*/
 Term:		Var
-		{$$ = $1;}
+		{ $$ = $1;}
 		| MINUS Var
-		{$$ = new Expr(NULL, "-", $2);}
+		{ $$ = new Expr(NULL, "-", $2);}
 		| NUMBER
-		{$$ = new ExprNum($1);}
+		{ $$ = new ExprNum($1);}
 		| MINUS NUMBER
-		{$$ = new Expr(NULL, "-", new ExprNum($2));}
+		{ $$ = new Expr(NULL, "-", new ExprNum($2));}
 		| L_PAREN Expression R_PAREN
-		{$$ = $2;}
+		{ $$ = $2;}
 		| MINUS L_PAREN Expression R_PAREN
-		{$$ = new Expr(NULL, "-", $3);}
+		{ $$ = new Expr(NULL, "-", $3);}
 		| IDENTIFIER L_PAREN Expressions R_PAREN
-		{$$ = new FunctionCall($1, $2);}
+		{ $$ = new FunctionCall($1, $2);}
 		;
 /*KATIE:var*/
 Vars:		Var COMMA Vars
-		{$$ = $3; $3->append($1);}
+		{ $$ = $3; $3->append($1);}
 		| Var
-		{$$ = new VarList(); $$->append($1);}
+		{ $$ = new VarList(); $$->append($1);}
 		;
 
 Var:		IDENTIFIER	
-		{$$ = new IdVar($1);}
+		{ $$ = new IdVar($1);}
 		| IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
-		{$$ = new ArrayVar($1, $3);}
+		{ $$ = new ArrayVar($1, $3);}
 		;
 
 %%

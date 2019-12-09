@@ -303,6 +303,29 @@ class DoWhileStatement : public Statement
     StatementList *loop_block;
 };
 
+class IfStatement : public Statement
+{
+  public:
+    IfStatement(Expr *bool_expr, StatementList *block) : bool_expr(bool_expr), block(block) {}
+    virtual std::string gencode() {
+	std::stringstream ss;
+	l0 = Generator::make_label();
+	l1 = Generator::make_label();
+	
+	ss << "?:=" << l0 << ", " << bool_expr->ret_var << '\n';
+	ss << ":= " << l1 << '\n';
+	ss << ": " << l0 << '\n';
+	ss << block->gencode();
+	ss << ": " << l1;
+
+	return ss.str();
+    }
+
+  protected:
+    Expr *bool_expr;
+    StatementList *block;
+};
+
 class IfElseStatement : public Statement
 {
   public:
