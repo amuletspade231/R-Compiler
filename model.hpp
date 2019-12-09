@@ -37,6 +37,24 @@ class ASTNode
     virtual std::string gencode() = 0;
 };
 
+
+class Function : public ASTNode
+{
+  public:
+    Function(IdVar func, Declaration *params, DeclarationList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
+    virtual std::string gencode() 
+    {
+	std::stringstream ss;
+ 	//TODO	
+    }
+
+  protected:
+    IdVar func;
+    Declaration *params;
+    DeclarationList *locals;
+    StatementList *body
+};
+
 class FunctionCall : public ASTNode
 {
   public:
