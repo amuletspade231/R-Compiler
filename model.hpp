@@ -37,6 +37,31 @@ class ASTNode
     virtual std::string gencode() = 0;
 };
 
+class FunctionList : public ASTNode
+{
+  public:
+    FunctionList() {}
+    virtual ~FunctionList()
+    {
+        for (auto f : func_vec)
+        {
+            delete f;
+        }
+    }
+    void append(Function f) { func_vec.insert(func_vec.begin(), f); }
+
+    virtual std::string gencode() {
+        std::stringstream ss;
+        for (auto f : func_vec) {
+            ss << f->gencode();
+        }
+        return ss.str();
+    }
+
+  protected:
+    std::vector<Function *> func_vec;
+};
+
 
 class Function : public ASTNode
 {
