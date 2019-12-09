@@ -303,6 +303,19 @@ class DoWhileStatement : public Statement
     StatementList *loop_block;
 };
 
+class ContinueStatement : public Statement
+{
+    public:
+	ContinueStatement() {}
+
+	virtual std::string gencode() {
+	    std::stringstream ss;
+	    ss << "goto FAKE_LABEL\n";
+
+	    return ss.str();
+	}
+};
+
 class IfStatement : public Statement
 {
   public:
