@@ -46,10 +46,12 @@ class Function : public ASTNode
     {
 	std::stringstream ss;
  	ss << "func " << func->ret_var << '\n';
-	params->gencode();
-	locals->gencode();
-	body->gencode();
-	ss << "endfunc";
+	ss << params->gencode();
+	ss << locals->gencode();
+	ss << body->gencode();
+	ss << "endfunc\n";
+
+	return ss.str();
     }
 
   protected:
