@@ -218,6 +218,15 @@ class ExprArray : public Expr
 
 class Statement : public ASTNode
 {
+    public:
+	std::string backpatch(std::string label) {
+	    std::string code = gencode();
+	    int index = code.find("FAKE_LABEL");
+
+	    code.replace(index, 10, label); //"FAKE_LABEL" has length 10
+
+	    return code;
+	}
 };
 
 class StatementList : public ASTNode
@@ -277,7 +286,7 @@ class WhileStatement : public Statement
 	ss << "?:= " << begin_loop << ", " << bool_expr->ret_var << '\n';
 	ss << ":= " << end_loop << '\n';
 	ss << ": " << begin_loop << '\n';
-	ss << while_block->gencode();
+	ss << while_block->backpatch(condition);
 	ss << ":= " << condition << '\n';
 	ss << ": " << end_loop << '\n';
 
@@ -303,7 +312,7 @@ class DoWhileStatement : public Statement
 	condition = Generator::make_label();
 
 	ss << ": " << begin_loop << '\n';
-	ss << loop_block->gencode();
+	ss << loop_block->backpatch(condition);
 	ss << ": " << condition << '\n';
 	ss << bool_expr->gencode();
 	ss << "?:= " << begin_loop << ", " << bool_expr->ret_var << '\n';
