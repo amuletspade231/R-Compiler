@@ -356,7 +356,6 @@ class ReadStatement : public Statement
     virtual std::string gencode()
     {
 	std::stringstream ss;
-	/*TODO: EVALUATE VAR IF ARRAY*/
 	size_t id = var->ret_var.find(",");
 	if (id == string::npos) {
 	    //not an arr
@@ -380,7 +379,6 @@ class WriteStatement : public Statement
     virtual std::string gencode()
     {
 	std::stringstream ss;
-	/*TODO: EVALUATE VAR IF ARRAY*/
 	size_t id = var->ret.find(",");
 	if (id == string::npos) {
 	    ss << ".> " << var->ret_var << '\n';
