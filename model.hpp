@@ -343,6 +343,30 @@ class ExprStatement : public Statement
     Expr *expr;
 };
 
+class AssignStatement : public Statement
+{
+  public:
+    AssignStatement(Var *var, Expr *expr) : var(var), expr(expr) {}
+    virtual ~AssignStatement() { delete expr; }
+
+    virtual std::string gencode()
+    {
+        std::stringstream ss;
+	ss << var->gencode();
+        ss << expr->gencode();
+	if (var->ret_var.find(',') == std::string::npos) { // assign to a variable
+            ss << "= " << var->ret_var << ", " << expr->ret_var << '\n';
+	} else { // assign to an array
+	    ss << "[]= " << var->ret_var << ", " << expr->ret_var << '\n';
+	}
+        return ss.str();
+    }
+
+  protected:
+    Var *var;
+    Expr *expr;
+};
+
 class DefineStatement : public Statement
 {
   public:
