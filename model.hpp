@@ -41,16 +41,20 @@ class ASTNode
 class Function : public ASTNode
 {
   public:
-    Function(IdVar func, Declaration *params, DeclarationList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
+    Function(IdVar func, DeclarationList *params, DeclarationList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
     virtual std::string gencode() 
     {
 	std::stringstream ss;
- 	//TODO	
+ 	ss << "func " << func->ret_var << '\n';
+	params->gencode();
+	locals->gencode();
+	body->gencode();
+	ss << "endfunc";
     }
 
   protected:
     IdVar func;
-    Declaration *params;
+    DeclarationList *params;
     DeclarationList *locals;
     StatementList *body
 };
