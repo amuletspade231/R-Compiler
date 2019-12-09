@@ -245,6 +245,21 @@ class StatementList : public ASTNode
     std::vector<Statement *> stat_vec;
 };
 
+class ReturnStatement : public Statement
+{
+  public :
+    ReturnStatement(Expr *expr) : expr(expr) {}
+    virtual std::string gencode() {
+	std::stringstream ss;
+	expr->gencode();
+	ss << "ret " << expr->ret_var << '\n';
+	return ss.str();
+    }
+
+  protected:
+    Expr *expr;
+};
+
 class WhileStatement : public Statement
 {
   public:

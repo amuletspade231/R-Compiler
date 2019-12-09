@@ -85,7 +85,7 @@ Statement:	Var ASSIGN Expression
 		| CONTINUE
 		{printf("Statement -> CONTINUE\n");}
 		| RETURN Expression
-		{printf("Statement -> RETURN Expression\n");}
+		{ $$ = new ReturnStatement($2);}
 		;
 /*AMANDA:bool-expr*/
 BoolExpr:	RelationAndExpr
