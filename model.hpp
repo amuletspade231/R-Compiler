@@ -41,7 +41,7 @@ class ASTNode
 class Function : public ASTNode
 {
   public:
-    Function(IdVar func, DeclarationList *params, DeclarationList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
+    Function(IdVar func, StatementList *params, StatementList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
     virtual std::string gencode() 
     {
 	std::stringstream ss;
@@ -56,8 +56,8 @@ class Function : public ASTNode
 
   protected:
     IdVar func;
-    DeclarationList *params;
-    DeclarationList *locals;
+    StatementList *params;
+    StatementList *locals;
     StatementList *body
 };
 
@@ -70,7 +70,7 @@ class FunctionCall : public ASTNode
 	std::stringstream ss;
 	std::string temp = Generator::make_var();
 	param->gencode();
-	for( p : param->expr_list ) {
+	for( p : param->expr_vec ) {
 		ss << "param " << p->ret_var << '\n';
 	} 
 	ss << "call " << func->ret_var << ", " << temp << '\n';
@@ -134,21 +134,21 @@ class ExprList : Expr
     ExprList() {}
     virtual ~ExprList()
     {
-	for(auto e : expr_list) { delete e; }
+	for(auto e : expr_vec) { delete e; }
     }
-    void append(Expr *e) { expr_list.push_back(e); }
+    void append(Expr *e) { expr_vec.insert(expr_vec.begin(), e); }
 
     virtual std::string gencode()
     {
 	std::stringstream ss;
-	for(auto e : expr_list) { 
+	for(auto e : expr_vec) { 
 	    ss << e->gencode();
 	}
 	return ss.str();
     }
 
   protected:
-    std::vector<Expr *> expr_list;
+    std::vector<Expr *> expr_vec;
 }
 
 class ExprID : public Expr
@@ -231,7 +231,7 @@ class StatementList : public ASTNode
             delete s;
         }
     }
-    void append(Statement *s) { stat_vec.push_back(s); }
+    void append(Statement *s) { stat_vec.insert(stat_vec.begin(), s); }
 
     virtual std::string gencode() {
         std::stringstream ss;
@@ -373,27 +373,30 @@ class AssignStatement : public Statement
     Expr *expr;
 };
 
-class DefineStatement : public Statement
+class Declaration : public Statement
 {
   public:
-    DefineStatement(std::string name) : name(name) {}
-    DefineStatement(std::string name, Expr *expr) : name(name), expr(expr) {}
-    virtual ~DefineStatement() { delete expr; }
+    Declaration(std::string name) { id_list.pushback(name); }
+    Declaration(std::string name, int arr_size) : arr_size(arr_size) { id_list.push_back(name); }
 
     virtual std::string gencode()
     {
         std::stringstream ss;
-        ss << ". " << name << '\n';
-        if (expr) {
-            ss << expr->gencode();
-            ss << "= " << name << ", " << expr->ret_var << '\n';
-        }
+	for (auto name : id_list) {
+	    if (arr_size < 0) { // not an array
+            	ss << ". " << name << '\n';
+	    } else { // is an array
+	    	ss << ".[] " << name << ", " << arr_size << '\n';
+	    }
+	}
         return ss.str();
     }
 
+    void append(std::string name) { id_list.insert(id_list.begin(), name);}
+
   protected:
-    std::string name;
-    Expr *expr = nullptr;
+    std::vector<std::string> id_list;
+    int arr_size = -1;
 };
 
 class ReadStatement : public Statement
@@ -455,7 +458,7 @@ class VarList : public ASTNode
 		delete v;
 	}
     }
-    void append(Variable *v) { var_vec.push_back(v);}
+    void append(Variable *v) { var_vec.insert(var_vec.begin(), v);}
 
     virtual std::string gencode() {
 	std::stringstream ss;
