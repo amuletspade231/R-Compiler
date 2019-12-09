@@ -49,18 +49,18 @@ Function:	FUNCTION IDENTIFIER SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEG
 		{ $$ = new Function($2, $5, $8, $11); }
 /*AMANDA:declaration*/
 Declarations:	Declaration SEMICOLON
-		{printf("Declarations -> Declaration SEMICOLON\n");}
+		{$$ = new StatementList(); $$->append}
 		| Declaration SEMICOLON Declarations
-		{printf("Declarations -> Declaration SEMICOLON Declarations\n");}
+		{$$ = $3; $$->append($1);}
 		|
-		{printf("Declarations -> Epsilon\n");}
+		{}
 
 Declaration:	IDENTIFIER COMMA Declaration
-		{printf("Declaration -> IDENTIFIER COMMA Declaration\n");}
+		{$$ = $3; $$->append($1); /*append id to id list of declaration*/}
 		| IDENTIFIER COLON INTEGER
-		{printf("Declaration -> IDENTIFIER COLON INTEGER\n");}
+		{$$ = new Declaration($1);}
 		| IDENTIFIER COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
-		{printf("Declaration -> IDENTIFIER COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");}
+		{$$ = new Declaration($1, $5);}
 /*KATIE:statement*/
 Statements:	Statement SEMICOLON Statements
 		{$$ = $3; $3->append($1); /*append by push_front*/ }
