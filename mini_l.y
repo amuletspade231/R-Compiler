@@ -133,17 +133,17 @@ RelationExpr:	NOT RelationExpr
 		{ $$ = $2; }
 /*AMANDA:comp*/
 Comp:		EQ 
-		{ $$ = "=="; }
+		{ $$ = (char*)"=="; }
 		| NEQ
-		{ $$ = "!="; }
+		{ $$ = (char*)"!="; }
 		| GT 
-		{ $$ = ">"; }
+		{ $$ = (char*)">"; }
 		| GTE 
-		{ $$ = ">="; }
+		{ $$ = (char*)">="; }
 		| LT 
-		{ $$ = "<"; }
+		{ $$ = (char*)"<"; }
 		| LTE
-		{ $$ = "<="; }
+		{ $$ = (char*)"<="; }
 		;
 /*KATIE:expression*/
 Expressions: 	Expression COMMA Expressions

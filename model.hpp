@@ -245,17 +245,7 @@ class ExprArray : public Expr
 };
 
 class Statement : public ASTNode
-{
-    public:
-	std::string backpatch(std::string label) {
-	    std::string code = gencode();
-	    int index = code.find("FAKE_LABEL");
-
-	    code.replace(index, 10, label); //"FAKE_LABEL" has length 10
-
-	    return code;
-	}
-};
+{};
 
 class StatementList : public ASTNode
 {
@@ -269,6 +259,14 @@ class StatementList : public ASTNode
         }
     }
     void append(Statement *s) { stat_vec.insert(stat_vec.begin(), s); }
+
+    std::string backpatch(std::string label) {
+        std::string code = gencode();
+        int index = code.find("FAKE_LABEL");
+
+        code.replace(index, 10, label); //"FAKE_LABEL" has length 10
+        return code;
+    }
 
     virtual std::string gencode() {
         std::stringstream ss;
