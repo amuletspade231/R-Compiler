@@ -534,11 +534,11 @@ class WriteStatement : public Statement
 class Function : public ASTNode
 {
   public:
-    Function(IdVar *func, StatementList *params, StatementList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
+    Function(char *func, StatementList *params, StatementList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
     virtual std::string gencode() 
     {
 	std::stringstream ss;
- 	ss << "func " << func->ret_var << '\n';
+ 	ss << "func " << func << '\n';
 	ss << params->gencode();
 	ss << locals->gencode();
 	ss << body->gencode();
@@ -548,7 +548,7 @@ class Function : public ASTNode
     }
 
   protected:
-    IdVar *func;
+    char *func;
     StatementList *params;
     StatementList *locals;
     StatementList *body;
@@ -579,10 +579,10 @@ class FunctionList : public ASTNode
     std::vector<Function *> func_vec;
 };
 
-class FunctionCall : public ASTNode
+class FunctionCall : public Variable
 {
   public:
-    FunctionCall(IdVar *func, ExprList *param) : func(func), param(param) {}
+    FunctionCall(std::string func, ExprList *param) : func(func), param(param) {}
     virtual std::string gencode()
     {
 	std::stringstream ss;
@@ -591,7 +591,7 @@ class FunctionCall : public ASTNode
 	for( auto p : param->expr_vec ) {
 		ss << "param " << p->ret_var << '\n';
 	} 
-	ss << "call " << func->ret_var << ", " << temp << '\n';
+	ss << "call " << func << ", " << temp << '\n';
 	ret_var = temp;
 	return ss.str();
     }
@@ -600,6 +600,6 @@ class FunctionCall : public ASTNode
 
   protected:
     //FunctionCall() {}
-    IdVar func;
+    std::string func;
     ExprList *param;
 };

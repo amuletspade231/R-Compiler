@@ -6,7 +6,7 @@
  void yyerror(const char *msg);
  extern int curLn;
  extern int curPos;
- extern ASTNode* root
+ extern ASTNode* root;
  extern int yylex();
 %}
 
@@ -59,13 +59,14 @@
 /*AMANDA:program*/
 Program:	Functions
 		{ $$ = $1; root = $$; }
-
+		;
 Functions:	Function
 		{ $$ = new FunctionList(); $$->append($1); }
 		| Function Functions 
 		{ $$ = $2; $2->append($1); /*this append will be a "push front"*/ }
 		| 
 		{}
+		;
 /*AMANDA:function*/
 Function:	FUNCTION IDENTIFIER SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY
 		{ $$ = new Function($2, $5, $8, $11); }
@@ -76,13 +77,14 @@ Declarations:	Declaration SEMICOLON
 		{ $$ = $3; $$->append($1);}
 		|
 		{}
-
+		;
 Declaration:	IDENTIFIER COMMA Declaration
 		{ $$ = $3; $$->append($1); /*append id to id list of declaration*/}
 		| IDENTIFIER COLON INTEGER
 		{ $$ = new Declaration($1);}
 		| IDENTIFIER COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
 		{ $$ = new Declaration($1, $5);}
+		;
 /*KATIE:statement*/
 Statements:	Statement SEMICOLON Statements
 		{ $$ = $3; $3->append($1); /*append by push_front*/ }
@@ -91,7 +93,7 @@ Statements:	Statement SEMICOLON Statements
 		;
 
 Statement:	Var ASSIGN Expression
-		{ $$ = new DefineStatement($1, $3);}
+		{ $$ = new AssignStatement($1, $3);}
 		| IF BoolExpr THEN Statements ENDIF
 		{ $$ = new IfStatement($2, $4);}
 		| IF BoolExpr THEN Statements ELSE Statements ENDIF
@@ -105,7 +107,7 @@ Statement:	Var ASSIGN Expression
 		| WRITE Vars
 		{ $$ = new WriteStatement($2);}
 		| CONTINUE
-		{printf("Statement -> CONTINUE\n");}
+		{ $$ = new ContinueStatement();}
 		| RETURN Expression
 		{ $$ = new ReturnStatement($2);}
 		;
@@ -114,11 +116,13 @@ BoolExpr:	RelationAndExpr
 		{ $$ = $1; }
 		| RelationAndExpr OR RelationAndExpr
 		{ $$ = new Expr($1, "||", $3); }
+		;
 /*AMANDA:relation and expr*/
 RelationAndExpr: RelationExpr
 		 { $$ = $1; }
 		 | RelationExpr AND RelationExpr
 		 { $$ = new Expr($1, "&&", $3); }
+		;
 /*AMANDA:relation expr*/
 RelationExpr:	NOT RelationExpr
 		{ $$ = new Expr(NULL, "!", $2); }
@@ -130,6 +134,7 @@ RelationExpr:	NOT RelationExpr
 		{ $$ = new ExprBool("false"); }
 		| L_PAREN BoolExpr R_PAREN
 		{ $$ = $2; }
+		;
 /*AMANDA:comp*/
 Comp:		EQ 
 		{ $$ = (char*)"=="; }
