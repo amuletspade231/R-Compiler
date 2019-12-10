@@ -1529,13 +1529,13 @@ yyreduce:
 
   case 30:
 #line 128 "mini_l.y" /* yacc.c:1646  */
-    { (yyval.exp) = new ExprBool(true); }
+    { (yyval.exp) = new ExprBool("true"); }
 #line 1534 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
 #line 130 "mini_l.y" /* yacc.c:1646  */
-    { (yyval.exp) = new ExprBool(false); }
+    { (yyval.exp) = new ExprBool("false"); }
 #line 1540 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 

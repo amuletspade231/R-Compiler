@@ -125,9 +125,9 @@ RelationExpr:	NOT RelationExpr
 		| Expression Comp Expression
 		{ $$ = new Expr($1, $2, $3); }
 		| TRUE
-		{ $$ = new ExprBool(true); }
+		{ $$ = new ExprBool("true"); }
 		| FALSE
-		{ $$ = new ExprBool(false); }
+		{ $$ = new ExprBool("false"); }
 		| L_PAREN BoolExpr R_PAREN
 		{ $$ = $2; }
 /*AMANDA:comp*/
