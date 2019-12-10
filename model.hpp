@@ -83,7 +83,7 @@ class Expr : public ASTNode
 };
 
 
-class Variable : public ASTNode
+class Variable : public Expr
 {
   public:
     std::string ret_var = "";
@@ -489,7 +489,7 @@ class Declaration : public Statement
 class ReadStatement : public Statement
 {
   public: 
-    ReadStatement(Variable *var) : var(var) {}
+    ReadStatement(VarList *var) : var(var) {}
 
     virtual std::string gencode()
     {
@@ -512,7 +512,7 @@ class ReadStatement : public Statement
 class WriteStatement : public Statement
 {
   public:
-    WriteStatement(Variable *var) : var(var) {}
+    WriteStatement(VarList *var) : var(var) {}
 
     virtual std::string gencode()
     {
