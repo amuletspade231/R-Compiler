@@ -38,54 +38,6 @@ class ASTNode
 };
 
 
-class Function : public ASTNode
-{
-  public:
-    Function(IdVar func, StatementList *params, StatementList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
-    virtual std::string gencode() 
-    {
-	std::stringstream ss;
- 	ss << "func " << func->ret_var << '\n';
-	ss << params->gencode();
-	ss << locals->gencode();
-	ss << body->gencode();
-	ss << "endfunc\n";
-
-	return ss.str();
-    }
-
-  protected:
-    IdVar func;
-    StatementList *params;
-    StatementList *locals;
-    StatementList *body
-};
-
-class FunctionList : public ASTNode
-{
-  public:
-    FunctionList() {}
-    virtual ~FunctionList()
-    {
-        for (auto f : func_vec)
-        {
-            delete f;
-        }
-    }
-    void append(Function f) { func_vec.insert(func_vec.begin(), f); }
-
-    virtual std::string gencode() {
-        std::stringstream ss;
-        for (auto f : func_vec) {
-            ss << f->gencode();
-        }
-        return ss.str();
-    }
-
-  protected:
-    std::vector<Function *> func_vec;
-};
-
 class Variable : public ASTNode
 {
 };
@@ -126,6 +78,8 @@ class IdVar : public Variable
 	return "";	
     }
 
+    std::string ret_var;
+
   protected:
     std::string name;
 };
@@ -143,6 +97,9 @@ class ArrayVar : public Variable
 	ss << exprIndex->gencode();
 	return ss.str();	
     }
+
+    std::string ret_var;
+
 
   protected:
     std::string name;
@@ -566,6 +523,55 @@ class WriteStatement : public Statement
 
   protected:
     Variable *var;
+};
+
+
+class Function : public ASTNode
+{
+  public:
+    Function(IdVar *func, StatementList *params, StatementList *locals, StatementList *body) : func(func), params(params), locals(locals), body(body) {}
+    virtual std::string gencode() 
+    {
+	std::stringstream ss;
+ 	ss << "func " << func->ret_var << '\n';
+	ss << params->gencode();
+	ss << locals->gencode();
+	ss << body->gencode();
+	ss << "endfunc\n";
+
+	return ss.str();
+    }
+
+  protected:
+    IdVar *func;
+    StatementList *params;
+    StatementList *locals;
+    StatementList *body;
+};
+
+class FunctionList : public ASTNode
+{
+  public:
+    FunctionList() {}
+    virtual ~FunctionList()
+    {
+        for (auto f : func_vec)
+        {
+            delete f;
+        }
+    }
+    void append(Function f) { func_vec.insert(func_vec.begin(), f); }
+
+    virtual std::string gencode() {
+        std::stringstream ss;
+        for (auto f : func_vec) {
+            ss << f->gencode();
+        }
+        return ss.str();
+    }
+
+  protected:
+    std::vector<Function *> func_vec;
 };
 
 class FunctionCall : public ASTNode
