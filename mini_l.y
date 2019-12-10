@@ -203,6 +203,9 @@ Var:		IDENTIFIER
 		;
 
 %%
+int Generator::counter_label;
+int Generator::counter_var;
+ASTNode *root;
 
 int main(int argc, char **argv) {
    yyparse(); // Calls yylex() for tokens.

@@ -71,7 +71,7 @@
  void yyerror(const char *msg);
  extern int curLn;
  extern int curPos;
- extern ASTNode* root
+ extern ASTNode* root;
  extern int yylex();
 
 #line 78 "mini_l.tab.c" /* yacc.c:339  */
@@ -503,12 +503,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    60,    60,    63,    65,    68,    70,    73,    75,    78,
-      80,    82,    84,    87,    89,    93,    95,    97,    99,   101,
-     103,   105,   107,   109,   113,   115,   118,   120,   123,   125,
-     127,   129,   131,   134,   136,   138,   140,   142,   144,   148,
-     150,   154,   156,   158,   162,   164,   166,   168,   172,   174,
-     176,   178,   180,   182,   184,   188,   190,   194,   196
+       0,    60,    60,    63,    65,    68,    71,    74,    76,    79,
+      81,    83,    85,    89,    91,    95,    97,    99,   101,   103,
+     105,   107,   109,   111,   115,   117,   121,   123,   127,   129,
+     131,   133,   135,   139,   141,   143,   145,   147,   149,   153,
+     155,   159,   161,   163,   167,   169,   171,   173,   177,   179,
+     181,   183,   185,   187,   189,   193,   195,   199,   201
 };
 #endif
 
@@ -1384,319 +1384,319 @@ yyreduce:
     break;
 
   case 6:
-#line 71 "mini_l.y" /* yacc.c:1646  */
+#line 72 "mini_l.y" /* yacc.c:1646  */
     { (yyval.func) = new Function((yyvsp[-10].sval), (yyvsp[-7].stat_list), (yyvsp[-4].stat_list), (yyvsp[-1].stat_list)); }
 #line 1390 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 74 "mini_l.y" /* yacc.c:1646  */
+#line 75 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat_list) = new StatementList(); (yyval.stat_list)->append((yyvsp[-1].dec));}
 #line 1396 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 76 "mini_l.y" /* yacc.c:1646  */
+#line 77 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat_list) = (yyvsp[0].stat_list); (yyval.stat_list)->append((yyvsp[-2].dec));}
 #line 1402 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 78 "mini_l.y" /* yacc.c:1646  */
+#line 79 "mini_l.y" /* yacc.c:1646  */
     {}
 #line 1408 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 81 "mini_l.y" /* yacc.c:1646  */
+#line 82 "mini_l.y" /* yacc.c:1646  */
     { (yyval.dec) = (yyvsp[0].dec); (yyval.dec)->append((yyvsp[-2].sval)); /*append id to id list of declaration*/}
 #line 1414 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 83 "mini_l.y" /* yacc.c:1646  */
+#line 84 "mini_l.y" /* yacc.c:1646  */
     { (yyval.dec) = new Declaration((yyvsp[-2].sval));}
 #line 1420 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 85 "mini_l.y" /* yacc.c:1646  */
+#line 86 "mini_l.y" /* yacc.c:1646  */
     { (yyval.dec) = new Declaration((yyvsp[-7].sval), (yyvsp[-3].ival));}
 #line 1426 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 88 "mini_l.y" /* yacc.c:1646  */
+#line 90 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat_list) = (yyvsp[0].stat_list); (yyvsp[0].stat_list)->append((yyvsp[-2].stat)); /*append by push_front*/ }
 #line 1432 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 90 "mini_l.y" /* yacc.c:1646  */
+#line 92 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat_list) = new StatementList(); (yyval.stat_list)->append((yyvsp[-1].stat));}
 #line 1438 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 94 "mini_l.y" /* yacc.c:1646  */
-    { (yyval.stat) = new DefineStatement((yyvsp[-2].var), (yyvsp[0].exp));}
+#line 96 "mini_l.y" /* yacc.c:1646  */
+    { (yyval.stat) = new AssignStatement((yyvsp[-2].var), (yyvsp[0].exp));}
 #line 1444 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 96 "mini_l.y" /* yacc.c:1646  */
+#line 98 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat) = new IfStatement((yyvsp[-3].exp), (yyvsp[-1].stat_list));}
 #line 1450 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 98 "mini_l.y" /* yacc.c:1646  */
+#line 100 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat) = new IfElseStatement((yyvsp[-5].exp), (yyvsp[-3].stat_list), (yyvsp[-1].stat_list));}
 #line 1456 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 100 "mini_l.y" /* yacc.c:1646  */
+#line 102 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat) = new WhileStatement((yyvsp[-3].exp), (yyvsp[-1].stat_list));}
 #line 1462 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 102 "mini_l.y" /* yacc.c:1646  */
+#line 104 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat) = new DoWhileStatement((yyvsp[-3].stat_list), (yyvsp[0].exp));}
 #line 1468 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 104 "mini_l.y" /* yacc.c:1646  */
+#line 106 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat) = new ReadStatement((yyvsp[0].var_list));}
 #line 1474 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 106 "mini_l.y" /* yacc.c:1646  */
+#line 108 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat) = new WriteStatement((yyvsp[0].var_list));}
 #line 1480 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 108 "mini_l.y" /* yacc.c:1646  */
-    {printf("Statement -> CONTINUE\n");}
+#line 110 "mini_l.y" /* yacc.c:1646  */
+    { (yyval.stat) = new ContinueStatement();}
 #line 1486 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 110 "mini_l.y" /* yacc.c:1646  */
+#line 112 "mini_l.y" /* yacc.c:1646  */
     { (yyval.stat) = new ReturnStatement((yyvsp[0].exp));}
 #line 1492 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 114 "mini_l.y" /* yacc.c:1646  */
+#line 116 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[0].exp); }
 #line 1498 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 116 "mini_l.y" /* yacc.c:1646  */
+#line 118 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), "||", (yyvsp[0].exp)); }
 #line 1504 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 119 "mini_l.y" /* yacc.c:1646  */
+#line 122 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[0].exp); }
 #line 1510 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 121 "mini_l.y" /* yacc.c:1646  */
+#line 124 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), "&&", (yyvsp[0].exp)); }
 #line 1516 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 124 "mini_l.y" /* yacc.c:1646  */
+#line 128 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr(NULL, "!", (yyvsp[0].exp)); }
 #line 1522 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 126 "mini_l.y" /* yacc.c:1646  */
+#line 130 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), (yyvsp[-1].sval), (yyvsp[0].exp)); }
 #line 1528 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 128 "mini_l.y" /* yacc.c:1646  */
+#line 132 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new ExprBool("true"); }
 #line 1534 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 130 "mini_l.y" /* yacc.c:1646  */
+#line 134 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new ExprBool("false"); }
 #line 1540 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 132 "mini_l.y" /* yacc.c:1646  */
+#line 136 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[-1].exp); }
 #line 1546 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 135 "mini_l.y" /* yacc.c:1646  */
+#line 140 "mini_l.y" /* yacc.c:1646  */
     { (yyval.sval) = (char*)"=="; }
 #line 1552 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 137 "mini_l.y" /* yacc.c:1646  */
+#line 142 "mini_l.y" /* yacc.c:1646  */
     { (yyval.sval) = (char*)"!="; }
 #line 1558 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 139 "mini_l.y" /* yacc.c:1646  */
+#line 144 "mini_l.y" /* yacc.c:1646  */
     { (yyval.sval) = (char*)">"; }
 #line 1564 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 141 "mini_l.y" /* yacc.c:1646  */
+#line 146 "mini_l.y" /* yacc.c:1646  */
     { (yyval.sval) = (char*)">="; }
 #line 1570 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 143 "mini_l.y" /* yacc.c:1646  */
+#line 148 "mini_l.y" /* yacc.c:1646  */
     { (yyval.sval) = (char*)"<"; }
 #line 1576 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 145 "mini_l.y" /* yacc.c:1646  */
+#line 150 "mini_l.y" /* yacc.c:1646  */
     { (yyval.sval) = (char*)"<="; }
 #line 1582 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 149 "mini_l.y" /* yacc.c:1646  */
+#line 154 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp_list) = (yyvsp[0].exp_list); (yyvsp[0].exp_list)->append((yyvsp[-2].exp));}
 #line 1588 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 151 "mini_l.y" /* yacc.c:1646  */
+#line 156 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp_list) = new ExprList(); (yyval.exp_list)->append((yyvsp[0].exp));}
 #line 1594 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 155 "mini_l.y" /* yacc.c:1646  */
+#line 160 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[0].exp);}
 #line 1600 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 157 "mini_l.y" /* yacc.c:1646  */
+#line 162 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), "+", (yyvsp[0].exp));}
 #line 1606 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 159 "mini_l.y" /* yacc.c:1646  */
+#line 164 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), "-", (yyvsp[0].exp));}
 #line 1612 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 163 "mini_l.y" /* yacc.c:1646  */
+#line 168 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[0].exp);}
 #line 1618 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 165 "mini_l.y" /* yacc.c:1646  */
+#line 170 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), "*", (yyvsp[0].exp));}
 #line 1624 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 167 "mini_l.y" /* yacc.c:1646  */
+#line 172 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), "/", (yyvsp[0].exp));}
 #line 1630 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 169 "mini_l.y" /* yacc.c:1646  */
+#line 174 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr((yyvsp[-2].exp), "%", (yyvsp[0].exp));}
 #line 1636 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 173 "mini_l.y" /* yacc.c:1646  */
+#line 178 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[0].var);}
 #line 1642 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 175 "mini_l.y" /* yacc.c:1646  */
+#line 180 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr(NULL, "-", (yyvsp[0].var));}
 #line 1648 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 177 "mini_l.y" /* yacc.c:1646  */
+#line 182 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new ExprNumber((yyvsp[0].ival));}
 #line 1654 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 179 "mini_l.y" /* yacc.c:1646  */
+#line 184 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr(NULL, "-", new ExprNumber((yyvsp[0].ival)));}
 #line 1660 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 181 "mini_l.y" /* yacc.c:1646  */
+#line 186 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[-1].exp);}
 #line 1666 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 183 "mini_l.y" /* yacc.c:1646  */
+#line 188 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new Expr(NULL, "-", (yyvsp[-1].exp));}
 #line 1672 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 185 "mini_l.y" /* yacc.c:1646  */
+#line 190 "mini_l.y" /* yacc.c:1646  */
     { (yyval.exp) = new FunctionCall((yyvsp[-3].sval), (yyvsp[-1].exp_list));}
 #line 1678 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 189 "mini_l.y" /* yacc.c:1646  */
+#line 194 "mini_l.y" /* yacc.c:1646  */
     { (yyval.var_list) = (yyvsp[0].var_list); (yyvsp[0].var_list)->append((yyvsp[-2].var));}
 #line 1684 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 191 "mini_l.y" /* yacc.c:1646  */
+#line 196 "mini_l.y" /* yacc.c:1646  */
     { (yyval.var_list) = new VarList(); (yyval.var_list)->append((yyvsp[0].var));}
 #line 1690 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 195 "mini_l.y" /* yacc.c:1646  */
+#line 200 "mini_l.y" /* yacc.c:1646  */
     { (yyval.var) = new IdVar((yyvsp[0].sval));}
 #line 1696 "mini_l.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 197 "mini_l.y" /* yacc.c:1646  */
+#line 202 "mini_l.y" /* yacc.c:1646  */
     { (yyval.var) = new ArrayVar((yyvsp[-3].sval), (yyvsp[-1].exp));}
 #line 1702 "mini_l.tab.c" /* yacc.c:1646  */
     break;
@@ -1930,8 +1930,11 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 200 "mini_l.y" /* yacc.c:1906  */
+#line 205 "mini_l.y" /* yacc.c:1906  */
 
+int Generator::counter_label;
+int Generator::counter_var;
+ASTNode *root;
 
 int main(int argc, char **argv) {
    yyparse(); // Calls yylex() for tokens.
