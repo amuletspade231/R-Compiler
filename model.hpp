@@ -89,7 +89,7 @@ class Variable : public Expr
     std::string ret_var = "";
 };
 
-class VarList : public ASTNode
+class VarList : public Variable
 {
   public:
     VarList() {}
