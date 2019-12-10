@@ -155,7 +155,7 @@ Expressions: 	Expression COMMA Expressions
 Expression:	MultExpr
 		{ $$ = $1;}
 		| MultExpr PLUS Expression
-		{ $$ = new Expr($1, "+", $3)}
+		{ $$ = new Expr($1, "+", $3);}
 		| MultExpr MINUS Expression
 		{ $$ = new Expr($1, "-", $3);}
 		;
