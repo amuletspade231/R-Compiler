@@ -584,7 +584,7 @@ class FunctionList : public ASTNode
 class FunctionCall : public ASTNode
 {
   public:
-    FunctionCall(IdVar func, ExprList *param) : func(func), param(param) {}
+    FunctionCall(IdVar *func, ExprList *param) : func(func), param(param) {}
     virtual std::string gencode()
     {
 	std::stringstream ss;
