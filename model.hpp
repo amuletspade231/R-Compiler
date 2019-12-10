@@ -38,74 +38,6 @@ class ASTNode
 };
 
 
-class Variable : public ASTNode
-{
-};
-
-class VarList : public ASTNode
-{
-  public:
-    VarList() {}
-    virtual ~VarList()
-    {
-	for (auto v : var_vec)
-	{
-		delete v;
-	}
-    }
-    void append(Variable *v) { var_vec.insert(var_vec.begin(), v);}
-
-    virtual std::string gencode() {
-	std::stringstream ss;
-	for (auto v : var_vec) {
-	    ss << v->gencode();
-	}
-	return ss.str();
-    }
-
-  protected: 
-    std::vector<Variable *> var_vec;
-};
-
-class IdVar : public Variable
-{
-  public:
-    IDVar(std::string name) : name(name) {}
-
-    virtual std::string gencode()
-    {
-	ret_var = name;
-	return "";	
-    }
-
-    std::string ret_var;
-
-  protected:
-    std::string name;
-};
-
-class ArrayVar : public Variable
-{
-  public:
-    ArrayVar(std::string name, Expr* exprIndex) : name(name), exprIndex(exprIndex) {}
-
-    virtual std::string gencode()
-    {
-	std::string temp = Generator::make_var();
-	ret_var = name + ", " + temp;
-	std::stringstream ss;
-	ss << exprIndex->gencode();
-	return ss.str();	
-    }
-
-    std::string ret_var;
-
-
-  protected:
-    std::string name;
-    Expr* exprIndex;
-};
-
 class Expr : public ASTNode
 {
   public:
@@ -150,6 +82,79 @@ class Expr : public ASTNode
     std::string op;
 };
 
+
+class Variable : public ASTNode
+{
+  public:
+    std::string ret_var = "";
+};
+
+class VarList : public ASTNode
+{
+  public:
+    VarList() {}
+    virtual ~VarList()
+    {
+	for (auto v : var_vec)
+	{
+		delete v;
+	}
+    }
+    void append(Variable *v) { var_vec.insert(var_vec.begin(), v);}
+
+    virtual std::string gencode() {
+	std::stringstream ss;
+	for (auto v : var_vec) {
+	    ss << v->gencode();
+	}
+	return ss.str();
+    }
+
+  protected: 
+    std::vector<Variable *> var_vec;
+};
+
+class IdVar : public Variable
+{
+  public:
+    IdVar(std::string name) : name(name) {}
+
+    virtual std::string gencode()
+    {
+	ret_var = name;
+	return "";	
+    }
+
+    std::string ret_var;
+
+  protected:
+    std::string name;
+};
+
+class ArrayVar : public Variable
+{
+  public:
+    ArrayVar(std::string name, Expr* exprIndex) : name(name), exprIndex(exprIndex) {}
+
+    virtual std::string gencode()
+    {
+	std::string temp = Generator::make_var();
+	ret_var = name + ", " + temp;
+	std::stringstream ss;
+	ss << exprIndex->gencode();
+	return ss.str();	
+    }
+
+    std::string ret_var;
+
+
+  protected:
+    std::string name;
+    Expr* exprIndex;
+};
+
+
+
 class ExprList : Expr
 {
   public:
@@ -169,9 +174,10 @@ class ExprList : Expr
 	return ss.str();
     }
 
-  protected:
     std::vector<Expr *> expr_vec;
-}
+
+  protected:
+};
 
 class ExprID : public Expr
 {
@@ -368,6 +374,7 @@ class IfStatement : public Statement
     IfStatement(Expr *bool_expr, StatementList *block) : bool_expr(bool_expr), block(block) {}
     virtual std::string gencode() {
 	std::stringstream ss;
+	std::string l0, l1;
 	l0 = Generator::make_label();
 	l1 = Generator::make_label();
 	
@@ -458,7 +465,7 @@ class AssignStatement : public Statement
 class Declaration : public Statement
 {
   public:
-    Declaration(std::string name) { id_list.pushback(name); }
+    Declaration(std::string name) { id_list.push_back(name); }
     Declaration(std::string name, int arr_size) : arr_size(arr_size) { id_list.push_back(name); }
 
     virtual std::string gencode()
@@ -490,7 +497,7 @@ class ReadStatement : public Statement
     {
 	std::stringstream ss;
 	size_t id = var->ret_var.find(",");
-	if (id == string::npos) {
+	if (id == std::string::npos) {
 	    //not an arr
 	    ss << ".< " << var->ret_var << '\n';
 	} else {
@@ -512,8 +519,8 @@ class WriteStatement : public Statement
     virtual std::string gencode()
     {
 	std::stringstream ss;
-	size_t id = var->ret.find(",");
-	if (id == string::npos) {
+	size_t id = var->ret_var.find(",");
+	if (id == std::string::npos) {
 	    ss << ".> " << var->ret_var << '\n';
 	} else {
 	    ss << ".[]> " << var->ret_var << '\n';
@@ -560,7 +567,7 @@ class FunctionList : public ASTNode
             delete f;
         }
     }
-    void append(Function f) { func_vec.insert(func_vec.begin(), f); }
+    void append(Function *f) { func_vec.insert(func_vec.begin(), f); }
 
     virtual std::string gencode() {
         std::stringstream ss;
@@ -583,7 +590,7 @@ class FunctionCall : public ASTNode
 	std::stringstream ss;
 	std::string temp = Generator::make_var();
 	param->gencode();
-	for( p : param->expr_vec ) {
+	for( auto p : param->expr_vec ) {
 		ss << "param " << p->ret_var << '\n';
 	} 
 	ss << "call " << func->ret_var << ", " << temp << '\n';
@@ -591,8 +598,10 @@ class FunctionCall : public ASTNode
 	return ss.str();
     }
 
+    std::string ret_var;
+
   protected:
-    FunctionCall() {}
+    //FunctionCall() {}
     IdVar func;
     ExprList *param;
-}
+};
