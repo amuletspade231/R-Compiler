@@ -1084,7 +1084,7 @@ YY_RULE_SETUP
 case 47:
 YY_RULE_SETUP
 #line 74 "mini_l.lex"
-{curPos += yyleng; yylval.sval = yytext; printf("ident: %s\n", yytext); return IDENTIFIER;}
+{curPos += yyleng; yylval.sval = strndup(yytext,yyleng);  /*printf("ident: %s\n", yytext);*/ return IDENTIFIER;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP

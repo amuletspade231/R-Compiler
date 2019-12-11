@@ -287,7 +287,7 @@ class ReturnStatement : public Statement
     ReturnStatement(Expr *expr) : expr(expr) {}
     virtual std::string gencode() {
 	std::stringstream ss;
-	expr->gencode();
+	ss << expr->gencode();
 	ss << "ret " << expr->ret_var << '\n';
 	return ss.str();
     }
