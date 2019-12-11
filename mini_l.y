@@ -202,7 +202,7 @@ Vars:		Var COMMA Vars
 		;
 
 Var:		IDENTIFIER	
-		{ $$ = new IdVar($1);}
+		{ $$ = new IdVar($1); }
 		| IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
 		{ $$ = new ArrayVar($1, $3);}
 		;

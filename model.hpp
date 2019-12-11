@@ -50,6 +50,7 @@ class Expr : public ASTNode
 
     virtual std::string gencode()
     {
+	std::cout << "operand1: " << p1->ret_var << "\noperand2: " << p2->ret_var << '\n';
         std::stringstream ss;
 	if(p1 != NULL) {
             ss << p1->gencode() << p2->gencode();
@@ -85,8 +86,8 @@ class Expr : public ASTNode
 
 class Variable : public Expr
 {
-  public:
-    std::string ret_var = "";
+    public:
+	std::string ret_var;
 };
 
 class VarList : public Variable
@@ -376,6 +377,7 @@ class IfStatement : public Statement
 	l0 = Generator::make_label();
 	l1 = Generator::make_label();
 	
+	ss << bool_expr->gencode();	
 	ss << "?:=" << l0 << ", " << bool_expr->ret_var << '\n';
 	ss << ":= " << l1 << '\n';
 	ss << ": " << l0 << '\n';
@@ -587,7 +589,7 @@ class FunctionCall : public Variable
     {
 	std::stringstream ss;
 	std::string temp = Generator::make_var();
-	param->gencode();
+	ss << param->gencode();
 	for( auto p : param->expr_vec ) {
 		ss << "param " << p->ret_var << '\n';
 	} 
@@ -599,7 +601,6 @@ class FunctionCall : public Variable
     std::string ret_var;
 
   protected:
-    //FunctionCall() {}
     std::string func;
     ExprList *param;
 };
