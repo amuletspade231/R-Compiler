@@ -58,25 +58,26 @@
 %% 
 /*AMANDA:program*/
 Program:	Functions
-		{ $$ = $1; root = $$; }
+		{ $$ = $1; root = $$; std::cout << root->gencode(); }
 		;
 Functions:	Function
 		{ $$ = new FunctionList(); $$->append($1); }
 		| Function Functions 
-		{ $$ = $2; $2->append($1); /*this append will be a "push front"*/ }
+		{ $$ = $2; $2->append($1); /*this append will be a "push front" */}
 		| 
-		{}
+		{ $$ = new FunctionList(); }
 		;
 /*AMANDA:function*/
 Function:	FUNCTION IDENTIFIER SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY
 		{ $$ = new Function($2, $5, $8, $11); }
+		;
 /*AMANDA:declaration*/
 Declarations:	Declaration SEMICOLON
 		{ $$ = new StatementList(); $$->append($1);}
 		| Declaration SEMICOLON Declarations
 		{ $$ = $3; $$->append($1);}
 		|
-		{}
+		{ $$ = new StatementList();}
 		;
 Declaration:	IDENTIFIER COMMA Declaration
 		{ $$ = $3; $$->append($1); /*append id to id list of declaration*/}
@@ -90,6 +91,8 @@ Statements:	Statement SEMICOLON Statements
 		{ $$ = $3; $3->append($1); /*append by push_front*/ }
 		| Statement SEMICOLON
 		{ $$ = new StatementList(); $$->append($1);}
+		|
+		{ $$ = new StatementList(); }
 		;
 
 Statement:	Var ASSIGN Expression
@@ -154,6 +157,8 @@ Expressions: 	Expression COMMA Expressions
 		{ $$ = $3; $3->append($1);}
 		| Expression
 		{ $$ = new ExprList(); $$->append($1);}
+		|
+		{ $$ = new ExprList(); }
 		;
 
 Expression:	MultExpr

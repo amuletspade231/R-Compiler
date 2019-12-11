@@ -71,7 +71,7 @@ COMMENT		[#][#].*\n
 "]"            {curPos += yyleng; return R_SQUARE_BRACKET;}
 ":="           {curPos += yyleng; return ASSIGN;}
 
-{IDENTIFIER}	{curPos += yyleng; yylval.sval = yytext; printf("ident: %s\n", yytext); return IDENTIFIER;}
+{IDENTIFIER}	{curPos += yyleng; yylval.sval = yytext; /*printf("ident: %s\n", yytext);*/ return IDENTIFIER;}
 {NONIDENT_1}	{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", curLn, curPos, yytext); exit(0);}
 {NONIDENT_2}	{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", curLn, curPos, yytext); exit(0);}
 {DIGIT}+	{curPos += yyleng; yylval.ival = atof(yytext); return NUMBER;}

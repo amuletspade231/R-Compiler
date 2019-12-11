@@ -380,7 +380,7 @@ class IfStatement : public Statement
 	ss << ":= " << l1 << '\n';
 	ss << ": " << l0 << '\n';
 	ss << block->gencode();
-	ss << ": " << l1;
+	ss << ": " << l1 << '\n';
 
 	return ss.str();
     }
