@@ -162,7 +162,7 @@ Expressions: 	Expression COMMA Expressions
 		;
 
 Expression:	MultExpr
-		{ $$ = $1;}
+		{ $$ = $1; /*std::cout << "Expr: " << $$->ret_var << std::endl;*/ }
 		| MultExpr PLUS Expression
 		{ $$ = new Expr($1, "+", $3);}
 		| MultExpr MINUS Expression
@@ -170,7 +170,7 @@ Expression:	MultExpr
 		;
 /*KATIE:mult expr*/
 MultExpr:	Term
-		{ $$ = $1;}
+		{ $$ = $1; /*std::cout << "MultExpr: " << $$->ret_var << std::endl;*/ }
 		| Term MULT MultExpr
 		{ $$ = new Expr($1, "*", $3);}
 		| Term DIV MultExpr
@@ -180,7 +180,7 @@ MultExpr:	Term
 		;
 /*KATIE:term*/
 Term:		Var
-		{ $$ = $1;}
+		{ $$ = $1; /* std::cout << "Term: " << $$->ret_var << std::endl;*/ }
 		| MINUS Var
 		{ $$ = new Expr(NULL, "-", $2);}
 		| NUMBER
@@ -202,7 +202,7 @@ Vars:		Var COMMA Vars
 		;
 
 Var:		IDENTIFIER	
-		{ $$ = new IdVar($1); }
+		{ $$ = new IdVar($1); $$->gencode();/* std::cout << "IDENT: " << $1 << " -> Var: " << $$->ret_var << std::endl;*/ }
 		| IDENTIFIER L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
 		{ $$ = new ArrayVar($1, $3);}
 		;

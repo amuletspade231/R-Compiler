@@ -50,11 +50,11 @@ class Expr : public ASTNode
 
     virtual std::string gencode()
     {
-	std::cout << "operand1: " << p1->ret_var << "\noperand2: " << p2->ret_var << '\n';
         std::stringstream ss;
 	if(p1 != NULL) {
             ss << p1->gencode() << p2->gencode();
             std::string temp = Generator::make_var();
+	    ss << ". " << temp << "\n";
             ss << op << ' ' << temp << ", " << p1->ret_var << ", " << p2->ret_var << '\n';
             ret_var = temp;
 	} else {
@@ -62,12 +62,15 @@ class Expr : public ASTNode
 	    ss << p2->gencode();
 	    if (op == "-") {
 	    	std::string temp0 = Generator::make_var();
+		ss << ". " << temp0 << "\n";
 	    	ss << "= " << temp0 << ", 0" << '\n';
 	    	std::string temp1 = Generator::make_var();
+		ss << ". " << temp1 << "\n";
 	    	ss << op << ' ' << temp1 << ", " << temp0 << ", " << p2->ret_var << '\n';
 	    	ret_var = temp1;
 	    } else { //op == "!"
 		std::string temp = Generator::make_var();
+		ss << ". " << temp << "\n";
 		ss << op << ' ' << temp << ", " << p2->ret_var << '\n';
 		ret_var = temp;
 	    }
@@ -86,8 +89,6 @@ class Expr : public ASTNode
 
 class Variable : public Expr
 {
-    public:
-	std::string ret_var;
 };
 
 class VarList : public Variable
@@ -107,7 +108,9 @@ class VarList : public Variable
 	std::stringstream ss;
 	for (auto v : var_vec) {
 	    ss << v->gencode();
+	    ret_var += v->ret_var + ",";
 	}
+	ret_var.resize(ret_var.size()-1);
 	return ss.str();
     }
 
@@ -118,7 +121,7 @@ class VarList : public Variable
 class IdVar : public Variable
 {
   public:
-    IdVar(std::string name) : name(name) {}
+    IdVar(std::string name) : name(name) { ret_var = name; }
 
     virtual std::string gencode()
     {
@@ -126,7 +129,6 @@ class IdVar : public Variable
 	return "";	
     }
 
-    std::string ret_var;
 
   protected:
     std::string name;
@@ -139,14 +141,11 @@ class ArrayVar : public Variable
 
     virtual std::string gencode()
     {
-	std::string temp = Generator::make_var();
-	ret_var = name + ", " + temp;
 	std::stringstream ss;
 	ss << exprIndex->gencode();
+	ret_var = name + ", " + exprIndex->ret_var;
 	return ss.str();	
     }
-
-    std::string ret_var;
 
 
   protected:
@@ -203,6 +202,7 @@ class ExprNumber : public Expr
         std::string temp = Generator::make_var();
         ret_var = temp;
         std::stringstream ss;
+	ss << ". " << temp << '\n';
         ss << "= " << temp << ", " << std::to_string(number) << '\n';
         return ss.str();
     }
@@ -220,6 +220,7 @@ class ExprBool : public Expr
         std::string temp = Generator::make_var();
         ret_var = temp;
         std::stringstream ss;
+	ss << ". " << temp << "\n";
         ss << "= " << temp << ", " << bval << '\n';
         return ss.str();
     }
@@ -237,6 +238,7 @@ class ExprArray : public Expr
 	std::string temp = Generator::make_var();
 	ret_var = temp;
 	std::stringstream ss;
+	ss << ". " << temp << "\n";
 	ss << "=[] " << temp << ", " << arr->ret_var << '\n';
 	return ss.str();	
     }
@@ -378,7 +380,7 @@ class IfStatement : public Statement
 	l1 = Generator::make_label();
 	
 	ss << bool_expr->gencode();	
-	ss << "?:=" << l0 << ", " << bool_expr->ret_var << '\n';
+	ss << "?:= " << l0 << ", " << bool_expr->ret_var << '\n';
 	ss << ":= " << l1 << '\n';
 	ss << ": " << l0 << '\n';
 	ss << block->gencode();
@@ -496,6 +498,8 @@ class ReadStatement : public Statement
     virtual std::string gencode()
     {
 	std::stringstream ss;
+	ss << var->gencode();
+	
 	size_t id = var->ret_var.find(",");
 	if (id == std::string::npos) {
 	    //not an arr
@@ -519,6 +523,8 @@ class WriteStatement : public Statement
     virtual std::string gencode()
     {
 	std::stringstream ss;
+	ss << var->gencode();
+
 	size_t id = var->ret_var.find(",");
 	if (id == std::string::npos) {
 	    ss << ".> " << var->ret_var << '\n';
@@ -589,6 +595,7 @@ class FunctionCall : public Variable
     {
 	std::stringstream ss;
 	std::string temp = Generator::make_var();
+	ss << ". " << temp << "\n";
 	ss << param->gencode();
 	for( auto p : param->expr_vec ) {
 		ss << "param " << p->ret_var << '\n';
@@ -598,7 +605,6 @@ class FunctionCall : public Variable
 	return ss.str();
     }
 
-    std::string ret_var;
 
   protected:
     std::string func;
